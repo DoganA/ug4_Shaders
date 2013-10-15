@@ -1,12 +1,13 @@
 // Fragment Shader - acts at a per-pixel level
 #version 120
 
-varying vec3 pass_color;
+varying vec3 normal;
 
 void main(void) {
-    vec4 color;
-    float intensity = (pass_color.x + pass_color.y + pass_color.z) / 3.0;
+    vec3 n = normalize(normal);
+    float intensity = dot(vec3(gl_LightSource[0].position), n);
 
+    vec4 color;
     if (intensity > 0.95) {
         color = vec4(0.99, 0.65, 0.24, 1.0);
     } else if (intensity > 0.75) {

@@ -13,9 +13,15 @@ compile:
 
 flat: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \
-		$(SHADERS)/flatShader.vert \
-		$(SHADERS)/flatShader.frag \
+		$(SHADERS)/phongModel.vert \
+		$(SHADERS)/phongModel.frag \
 		0
+
+gouraud: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/phongModel.vert \
+		$(SHADERS)/phongModel.frag \
+		1
 
 toon: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \

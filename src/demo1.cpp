@@ -109,7 +109,7 @@ glm::vec3 to_vec3(vector<double> v_vector) {
     return glm::vec3(v_vector[0], v_vector[1], v_vector[2]);
 }
 
-void SetupNBO() {
+vector<glm::vec3> _smooth_normals() {
     vector<glm::vec3> vertices = trig.Vertices();
     // initialize map of normals to zero
     map< vector<double>, vector<double> > normal_map;
@@ -147,6 +147,28 @@ void SetupNBO() {
     for (int i = 0; i < vertices.size(); i++) {
         normals.push_back(to_vec3(normal_map[to_vector(vertices[i])]));
     }
+    return normals;
+}
+
+vector<glm::vec3> _rough_normals() {
+    vector<glm::vec3> vertices = trig.Vertices();
+    vector<glm::vec3> normals;
+    for (int i = 0; i < vertices.size(); i += 3) {
+        // get vertices of this triangle
+        glm::vec3 v1 = vertices[i];
+        glm::vec3 v2 = vertices[i + 1];
+        glm::vec3 v3 = vertices[i + 2];
+        // compute face normal
+        glm::vec3 face_normal = glm::cross(v3 - v2, v1 - v2);
+        normals.push_back(glm::normalize(face_normal));
+        normals.push_back(glm::normalize(face_normal));
+        normals.push_back(glm::normalize(face_normal));
+    }
+    return normals;
+}
+
+void SetupNBO(bool smoothed) {
+    vector<glm::vec3> normals = smoothed ? _smooth_normals() : _rough_normals();
     glGenBuffers(1, &nbo);
     glBindBuffer(GL_ARRAY_BUFFER, nbo);
     glBufferData(
@@ -163,13 +185,15 @@ int main(int argc, char **argv) {
     char *model_path;
     char *vertexshader_path;
     char *fragmentshader_path;
-	if (argc == 4) {
+    bool use_smoothed_normals;
+	if (argc == 5) {
         model_path = argv[1];
         vertexshader_path = argv[2];
         fragmentshader_path = argv[3];
+        use_smoothed_normals = *argv[4] != '0';
 	} else {
         cerr << "Usage:" << endl;
-		cerr << argv[0] << " <model> <vertex-shader> <fragment-shader>" << endl;
+		cerr << argv[0] << " <model> <vertex-shader> <fragment-shader> <smooth-normals>" << endl;
 		exit(1);
 	}
 	// initialise OpenGL
@@ -194,7 +218,7 @@ int main(int argc, char **argv) {
     trig.LoadFile(model_path);
 	shader.Init(vertexshader_path, fragmentshader_path);
 	SetupVBO();
-    SetupNBO();
+    SetupNBO(use_smoothed_normals);
 	// set up camera and object transformation matrices
 	projectionMatrix = glm::ortho(-windowX*0.5f, windowX*0.5f, -windowY*0.5f,  windowY*0.5f, -1.0f, 400.0f);
 	viewMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-300.0f));

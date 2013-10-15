@@ -16,10 +16,5 @@ toon: compile
 		$(SHADERS)/toonShader.vert \
 		$(SHADERS)/toonShader.frag
 
-demo: compile
-	$(BIN)/$(PROG) $(RES)/teapot.obj \
-		$(SHADERS)/exampleShader.vert \
-		$(SHADERS)/exampleShader.frag
-
 clean:
 	rm -f $(BIN)/*

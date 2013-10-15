@@ -2,13 +2,10 @@
 #include "Shader.h"
 
 using namespace std;
-
 float windowX = 640.0f;
 float windowY = 480.0f;
-
 TriangleMesh trig;
 Shader shader;
-
 glm::mat4 projectionMatrix;
 glm::mat4 viewMatrix;
 glm::mat4 modelMatrix;
@@ -31,17 +28,14 @@ void DemoDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1,1,1);
 	shader.Bind();
-
 	// Find the location of our uniform variables in the current shader program
 	int projectMatrixLocation = glGetUniformLocation(shader.ID(), "projectionMatrix");
 	int viewMatrixLocation = glGetUniformLocation(shader.ID(), "viewMatrix");
 	int modelMatrixLocation = glGetUniformLocation(shader.ID(), "modelMatrix");
-
 	// Pass the current values for our variables to the shader program
 	glUniformMatrix4fv(projectMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
-
 	// Find the location for our vertex position variable
 	const char * attribute_name = "in_position";
 	int positionLocation = glGetAttribLocation(shader.ID(), attribute_name);
@@ -49,7 +43,6 @@ void DemoDisplay() {
 		cout << "Could not bind attribute " << attribute_name << endl;
 		return;
 	}
-
 	// Tell OpenGL we will be using vertex position variable in the shader
 	glEnableVertexAttribArray(positionLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -61,19 +54,16 @@ void DemoDisplay() {
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
-
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
 	glDisableVertexAttribArray(positionLocation);
 	shader.Unbind();
 	glFlush();
 }
 
-
 void DemoKeyboardHandler(unsigned char key, int x, int y) {
 	if(key == 'm') {
         cout << "Mouse location: " << x << " " << y << endl;
 	}
-
 	cout << "Key pressed: " << key << endl;
 }
 
@@ -86,14 +76,12 @@ void SetupVBO() {
 		sizeof(glm::vec3) * trig.VertexCount(), // size in bytes for the data
 		&trig.Vertices()[0],                    // pointer to the array of data
 		GL_STATIC_DRAW);
-
 	cout << "VBO generated!" << endl;
 }
 
 int main(int argc, char **argv) {
 	atexit(cleanup);
     cout << "Computer Graphics Assignment 1 Demo Program" << endl;
-
     char *model_path;
     char *vertexshader_path;
     char *fragmentshader_path;
@@ -106,17 +94,14 @@ int main(int argc, char **argv) {
 		cerr << argv[0] << " <model> <vertex-shader> <fragment-shader>" << endl;
 		exit(1);
 	}
-
 	// initialise OpenGL
 	glutInit(&argc, argv);
 	glutInitWindowSize(windowX, windowY);
 	glutCreateWindow("CG-CW1");
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
-
     // set display/keyboard callbacks
 	glutDisplayFunc(DemoDisplay);
     glutKeyboardFunc(DemoKeyboardHandler);
-
 	// initialise the OpenGL Extension Wrangler library for VBOs
 	GLenum err = glewInit();
 	if (err != GLEW_OK){
@@ -127,17 +112,14 @@ int main(int argc, char **argv) {
 		cout << "Error 2.1!" << endl;
 		exit(1);
 	}
-
 	// create shader, prepare data for OpenGL
     trig.LoadFile(model_path);
 	shader.Init(vertexshader_path, fragmentshader_path);
 	SetupVBO();
-
 	// set up camera and object transformation matrices
 	projectionMatrix = glm::ortho(-windowX*0.5f, windowX*0.5f, -windowY*0.5f,  windowY*0.5f, -1.0f, 400.0f);
 	viewMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(-20.0f,-50.0f,-20.0f));
 	modelMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
-
 	glutMainLoop();
 }
 
@@ -151,15 +133,12 @@ void TriangleMesh::LoadFile(char * filename) {
 		cout << "Can't open file " << filename << endl;
 		return;
 	}
-
 	vector<unsigned int> vertexIndices, uvIndices;
 	vector<glm::vec3> tempVertices;
 	vector<glm::vec2> tempUVs;
-
 	_max.x =-10000; _max.y =-10000; _max.z =-10000;
 	_min.x =10000; _min.y =10000; _min.z =10000;
 	glm::vec3 averageVertex(0.0f);
-
 	//Read in .obj
 	while(1){
 		char lineHeader[128];
@@ -172,17 +151,13 @@ void TriangleMesh::LoadFile(char * filename) {
 			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			tempVertices.push_back(vertex);
-
 			averageVertex += vertex;
-
 			if (vertex.x > _max.x) _max.x = vertex.x;
 			if (vertex.y > _max.y) _max.y = vertex.y;
 			if (vertex.z > _max.z) _max.z = vertex.z;
-
 			if (vertex.x < _min.x) _min.x = vertex.x;
 			if (vertex.y < _min.y) _min.y = vertex.y;
 			if (vertex.z < _min.z) _min.z = vertex.z;
-
 		}
 		else if(strcmp(lineHeader, "vt" ) == 0){
 			glm::vec2 uv;
@@ -199,7 +174,6 @@ void TriangleMesh::LoadFile(char * filename) {
 			}
 			Triangle trig(vertexIndex[0],vertexIndex[1],vertexIndex[2]);
 			_triangles.push_back(trig);
-
 			vertexIndices.push_back(vertexIndex[0]);
 			vertexIndices.push_back(vertexIndex[1]);
 			vertexIndices.push_back(vertexIndex[2]);
@@ -208,7 +182,6 @@ void TriangleMesh::LoadFile(char * filename) {
 			uvIndices.push_back(uvIndex[2]);
 		}
 	}
-
 	//Arrange in triangle order to fit with OpenGL's glDrawArrays(...) function.
 	//i.e. _vertices[0],_vertices[1], and _vertices[2] are the first triangle,
 	//_vertices[3],_vertices[4], and _vertices[5] are the second etc.
@@ -221,7 +194,6 @@ void TriangleMesh::LoadFile(char * filename) {
 		_vertices[i] = tempVertices[vertexIndices[i]-1];
 		_uvs[i] = tempUVs[uvIndices[i]-1];
 	}
-
 	float range;
 	if (_max.x-_min.x > _max.y-_min.y){
 		range = _max.x-_min.x;
@@ -229,13 +201,10 @@ void TriangleMesh::LoadFile(char * filename) {
 	else{
 		range = _max.y-_min.y;
 	}
-
 	averageVertex /= _vertices.size();
-
 	for (int i = 0; i < _vertices.size(); i++)
 	{
 		_vertices[i] = (_vertices[i]-averageVertex)/range*400.0f;
 	}
-
 	cout << "Number of triangles: " << _triangles.size() << ", number of vertices: " << _vertices.size() << endl;
 };

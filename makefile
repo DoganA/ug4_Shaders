@@ -11,6 +11,11 @@ PROG=demo1
 compile:
 	g++ -o $(BIN)/$(PROG) $(SRC)/*.cpp $(LIBS) -I$(LIB)
 
+toon: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/toonShader.vert \
+		$(SHADERS)/toonShader.frag
+
 demo: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \
 		$(SHADERS)/exampleShader.vert \

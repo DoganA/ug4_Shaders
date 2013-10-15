@@ -1,5 +1,6 @@
 #include "demo1.h"
 #include "Shader.h"
+#include <map>
 
 using namespace std;
 float windowX = 640.0f;
@@ -10,10 +11,8 @@ glm::mat4 projectionMatrix;
 glm::mat4 viewMatrix;
 glm::mat4 modelMatrix;
 
-// The vertex buffer object used for holding vertex information (from teapot
-// mesh) for the shader You should have one of these for each component for
-// rendering e.g. positions, normals, UV (texture) coordinates
-unsigned int vbo;
+unsigned int vbo; // vertex position buffer object
+unsigned int nbo; // vertex normal buffer object
 
 void cleanup() {
 }
@@ -28,6 +27,7 @@ void DemoDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1,1,1);
 	shader.Bind();
+
 	// Find the location of our uniform variables in the current shader program
 	int projectMatrixLocation = glGetUniformLocation(shader.ID(), "projectionMatrix");
 	int viewMatrixLocation = glGetUniformLocation(shader.ID(), "viewMatrix");
@@ -36,11 +36,11 @@ void DemoDisplay() {
 	glUniformMatrix4fv(projectMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
+
 	// Find the location for our vertex position variable
-	const char * attribute_name = "in_position";
-	int positionLocation = glGetAttribLocation(shader.ID(), attribute_name);
+	int positionLocation = glGetAttribLocation(shader.ID(), "in_position");
 	if (positionLocation == -1) {
-		cout << "Could not bind attribute " << attribute_name << endl;
+		cout << "Could not bind attribute in_position" << endl;
 		return;
 	}
 	// Tell OpenGL we will be using vertex position variable in the shader
@@ -54,6 +54,25 @@ void DemoDisplay() {
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
+
+	// Find the location for our vertex-normal variable
+	int normalLocation = glGetAttribLocation(shader.ID(), "in_normal");
+	if (normalLocation == -1) {
+		cout << "Could not bind attribute in_normal" << endl;
+		return;
+	}
+	// Tell OpenGL we will be using vertex normal variable in the shader
+	glEnableVertexAttribArray(normalLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, nbo);
+	glVertexAttribPointer(
+		normalLocation,    // attribute (location of the in_normal variable in our shader program)
+		3,                 // number of elements per vertex, here (x,y,z)
+		GL_FLOAT,          // the type of each element
+		GL_FALSE,          // take our values as-is
+		0,                 // no extra data between each position
+		0                  // offset of first element
+	);
+-
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
 	glDisableVertexAttribArray(positionLocation);
 	shader.Unbind();
@@ -61,10 +80,10 @@ void DemoDisplay() {
 }
 
 void DemoKeyboardHandler(unsigned char key, int x, int y) {
-	if(key == 'm') {
+    if(key == 'm') {
         cout << "Mouse location: " << x << " " << y << endl;
-	}
-	cout << "Key pressed: " << key << endl;
+    }
+    cout << "Key pressed: " << key << endl;
 }
 
 // create a new Vertex Buffer Object, bind it and stream data to it
@@ -77,6 +96,75 @@ void SetupVBO() {
 		&trig.Vertices()[0],                    // pointer to the array of data
 		GL_STATIC_DRAW);
 	cout << "VBO generated!" << endl;
+}
+
+int indexof(glm::vec3 elem, vector<glm::vec3> list) {
+    for (int i = 0; i < list.size(); i++) {
+        if (elem == list[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+vector<double> to_vector(glm::vec3 v_vec3) {
+    vector<double> v_vector;
+    v_vector.push_back(v_vec3.x);
+    v_vector.push_back(v_vec3.y);
+    v_vector.push_back(v_vec3.z);
+    return v_vector;
+}
+
+glm::vec3 to_vec3(vector<double> v_vector) {
+    return glm::vec3(v_vector[0], v_vector[1], v_vector[2]);
+}
+
+void SetupNBO() {
+    vector<glm::vec3> vertices = trig.Vertices();
+    // initialize map of normals to zero
+    map< vector<double>, vector<double> > normal_map;
+    for (int i = 0; i < vertices.size(); i++) {
+        vector<double> zeros;
+        zeros.push_back(0.0);
+        zeros.push_back(0.0);
+        zeros.push_back(0.0);
+        normal_map[to_vector(vertices[i])] = zeros;
+    }
+    for (int i = 0; i < vertices.size(); i += 3) {
+        // get vertices of this triangle
+        glm::vec3 v1 = vertices[i];
+        glm::vec3 v2 = vertices[i + 1];
+        glm::vec3 v3 = vertices[i + 2];
+        vector<double> v1_key = to_vector(v1);
+        vector<double> v2_key = to_vector(v2);
+        vector<double> v3_key = to_vector(v3);
+        // compute face normal
+        glm::vec3 face_normal = glm::cross(v3 - v1, v2 - v1);
+        // get the old vertex normal
+        glm::vec3 v1_old = to_vec3(normal_map[v1_key]);
+        glm::vec3 v2_old = to_vec3(normal_map[v2_key]);
+        glm::vec3 v3_old = to_vec3(normal_map[v3_key]);
+        // replace the old value with the new value
+        normal_map.erase(v1_key);
+        normal_map.erase(v2_key);
+        normal_map.erase(v3_key);
+        normal_map[v1_key] = to_vector(glm::normalize(v1_old + face_normal));
+        normal_map[v2_key] = to_vector(glm::normalize(v2_old + face_normal));
+        normal_map[v3_key] = to_vector(glm::normalize(v3_old + face_normal));
+    }
+    // convert the map of normals to a vector of normals
+    vector<glm::vec3> normals;
+    for (int i = 0; i < vertices.size(); i++) {
+        normals.push_back(to_vec3(normal_map[to_vector(vertices[i])]));
+    }
+    glGenBuffers(1, &nbo);
+    glBindBuffer(GL_ARRAY_BUFFER, nbo);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        sizeof(glm::vec3) * normals.size(),
+        &normals[0],
+        GL_STATIC_DRAW);
+    cout << "NBO generated!" << endl;
 }
 
 int main(int argc, char **argv) {
@@ -116,9 +204,10 @@ int main(int argc, char **argv) {
     trig.LoadFile(model_path);
 	shader.Init(vertexshader_path, fragmentshader_path);
 	SetupVBO();
+    SetupNBO();
 	// set up camera and object transformation matrices
 	projectionMatrix = glm::ortho(-windowX*0.5f, windowX*0.5f, -windowY*0.5f,  windowY*0.5f, -1.0f, 400.0f);
-	viewMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(-20.0f,-50.0f,-20.0f));
+	viewMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-10.0f));
 	modelMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
 	glutMainLoop();
 }

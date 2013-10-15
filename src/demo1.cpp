@@ -72,7 +72,6 @@ void DemoDisplay() {
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
--
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
 	glDisableVertexAttribArray(positionLocation);
 	shader.Unbind();
@@ -96,15 +95,6 @@ void SetupVBO() {
 		&trig.Vertices()[0],                    // pointer to the array of data
 		GL_STATIC_DRAW);
 	cout << "VBO generated!" << endl;
-}
-
-int indexof(glm::vec3 elem, vector<glm::vec3> list) {
-    for (int i = 0; i < list.size(); i++) {
-        if (elem == list[i]) {
-            return i;
-        }
-    }
-    return -1;
 }
 
 vector<double> to_vector(glm::vec3 v_vec3) {

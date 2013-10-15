@@ -23,7 +23,7 @@ void main(void) {
 
     vec3 Is = vec3(0.95, 0.95, 0.95); // specular light intensity
     vec3 ks = vec3(0.99, 0.99, 0.99); // specular reflectance
-    float n = 5; // shiny reflectance of object
+    float n = 100; // shiny reflectance of object
     float cosAlpha = cosTheta > 0.0 ? max(dot(N, R), 0.0) : 0.0f;
     specular = Is * ks * pow(cosAlpha, n);
 

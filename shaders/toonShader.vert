@@ -3,10 +3,10 @@
 
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 
-attribute vec3 in_position, in_normal;
+attribute vec3 vertex_position, vertex_normal;
 varying vec3 normal;
 
 void main(void) {
-    normal = gl_NormalMatrix * in_normal;
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(in_position, 1.0);
+    normal = gl_NormalMatrix * vertex_normal;
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex_position, 1.0);
 }

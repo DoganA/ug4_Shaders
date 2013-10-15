@@ -38,16 +38,16 @@ void DemoDisplay() {
 	glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
 
 	// Find the location for our vertex position variable
-	int positionLocation = glGetAttribLocation(shader.ID(), "in_position");
+	int positionLocation = glGetAttribLocation(shader.ID(), "vertex_position");
 	if (positionLocation == -1) {
-		cout << "Could not bind attribute in_position" << endl;
+		cout << "Could not bind attribute vertex_position" << endl;
 		return;
 	}
 	// Tell OpenGL we will be using vertex position variable in the shader
 	glEnableVertexAttribArray(positionLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glVertexAttribPointer(
-		positionLocation,  // attribute (location of the in_position variable in our shader program)
+		positionLocation,  // attribute (location of the position variable in our shader program)
 		3,                 // number of elements per vertex, here (x,y,z)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
@@ -56,16 +56,16 @@ void DemoDisplay() {
 	);
 
 	// Find the location for our vertex-normal variable
-	int normalLocation = glGetAttribLocation(shader.ID(), "in_normal");
+	int normalLocation = glGetAttribLocation(shader.ID(), "vertex_normal");
 	if (normalLocation == -1) {
-		cout << "Could not bind attribute in_normal" << endl;
+		cout << "Could not bind attribute vertex_normal" << endl;
 		return;
 	}
 	// Tell OpenGL we will be using vertex normal variable in the shader
 	glEnableVertexAttribArray(normalLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, nbo);
 	glVertexAttribPointer(
-		normalLocation,    // attribute (location of the in_normal variable in our shader program)
+		normalLocation,    // attribute (location of the normal variable in our shader program)
 		3,                 // number of elements per vertex, here (x,y,z)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is

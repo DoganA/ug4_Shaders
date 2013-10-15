@@ -94,11 +94,16 @@ int main(int argc, char **argv) {
 	atexit(cleanup);
     cout << "Computer Graphics Assignment 1 Demo Program" << endl;
 
-	if (argc > 1) {
-		trig.LoadFile(argv[1]);
+    char *model_path;
+    char *vertexshader_path;
+    char *fragmentshader_path;
+	if (argc == 4) {
+        model_path = argv[1];
+        vertexshader_path = argv[2];
+        fragmentshader_path = argv[3];
 	} else {
         cerr << "Usage:" << endl;
-		cerr << argv[0] << " <filename> " << endl;
+		cerr << argv[0] << " <model> <vertex-shader> <fragment-shader>" << endl;
 		exit(1);
 	}
 
@@ -124,7 +129,8 @@ int main(int argc, char **argv) {
 	}
 
 	// create shader, prepare data for OpenGL
-	shader.Init("shaders/exampleShader.vert","shaders/exampleShader.frag");
+    trig.LoadFile(model_path);
+	shader.Init(vertexshader_path, fragmentshader_path);
 	SetupVBO();
 
 	// set up camera and object transformation matrices

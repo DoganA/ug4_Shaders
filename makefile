@@ -5,12 +5,16 @@ LIB=./lib
 SRC=./src
 BIN=./bin
 RES=./res
+SHADERS=./shaders
+PROG=demo1
 
-all:
-	g++ -o $(BIN)/demo1 $(SRC)/*.cpp $(LIBS) -I$(LIB)
+compile:
+	g++ -o $(BIN)/$(PROG) $(SRC)/*.cpp $(LIBS) -I$(LIB)
 
-run: all
-	$(BIN)/demo1 $(RES)/teapot.obj
+demo: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/exampleShader.vert \
+		$(SHADERS)/exampleShader.frag
 
 clean:
 	rm -f $(BIN)/*

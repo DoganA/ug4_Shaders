@@ -129,7 +129,7 @@ void SetupNBO() {
         vector<double> v2_key = to_vector(v2);
         vector<double> v3_key = to_vector(v3);
         // compute face normal
-        glm::vec3 face_normal = glm::cross(v3 - v1, v2 - v1);
+        glm::vec3 face_normal = glm::cross(v3 - v2, v1 - v2);
         // get the old vertex normal
         glm::vec3 v1_old = to_vec3(normal_map[v1_key]);
         glm::vec3 v2_old = to_vec3(normal_map[v2_key]);
@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
     SetupNBO();
 	// set up camera and object transformation matrices
 	projectionMatrix = glm::ortho(-windowX*0.5f, windowX*0.5f, -windowY*0.5f,  windowY*0.5f, -1.0f, 400.0f);
-	viewMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-10.0f));
+	viewMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-300.0f));
 	modelMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
 	glutMainLoop();
 }

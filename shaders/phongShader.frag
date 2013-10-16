@@ -10,9 +10,8 @@ void main(void) {
     float n = 100; // shiny reflectance of object
     vec4 materialSpecular = vec4(Is * ks, 1.0);
 
-    float constantAttenuation = 0.3;
-    float linearAttenuation = 0.6;
-    float quadraticAttenuation = 0.1;
+    float constantAttenuation = 50;
+    float linearAttenuation = 0.8;
 
     vec4 color = ambientGlobal;
     vec3 N = normalize(normal);
@@ -21,10 +20,7 @@ void main(void) {
     float dist = length(L);
     float cosTheta = max(dot(L, N), 0.0);
     float cosAlpha = max(dot(N, R), 0.0);
-    float attenuation
-        = 1.0 / ( constantAttenuation
-                + linearAttenuation    * dist
-                + quadraticAttenuation * dist * dist);
+    float attenuation = 1.0 / (constantAttenuation + dist * linearAttenuation);
 
     if (cosTheta > 0.0) {
         color += attenuation * (diffuse * cosTheta + ambient);

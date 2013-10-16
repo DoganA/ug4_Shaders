@@ -29,7 +29,7 @@ void cleanup() {
 //   2) Calculate the vertex points for each triangle and draw them
 //   3) Flush the pipeline so that the instructions we gave are performed.
 void DemoDisplay() {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1,1,1);
 	shader.Bind();
 
@@ -252,7 +252,8 @@ int main(int argc, char **argv) {
 	glutInit(&argc, argv);
 	glutInitWindowSize(windowX, windowY);
 	glutCreateWindow("CG-CW1");
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+    glEnable(GL_DEPTH_TEST);
     // set display/keyboard callbacks
 	glutDisplayFunc(DemoDisplay);
     glutKeyboardFunc(DemoKeyboardHandler);

@@ -56,41 +56,36 @@ void Display() {
     glUniform1f(constantAttenuation_location, constantAttenuation);
     glUniform1f(linearAttenuation_location, linearAttenuation);
 
-	// Find the location for our vertex position variable
+    // Tell OpenGL we will be using vertex position variable in the shader
 	int position_location = glGetAttribLocation(shader.ID(), "vertex_position");
-	if (position_location == -1) {
-		cout << "Could not bind attribute vertex_position" << endl;
-		return;
-	}
-	// Tell OpenGL we will be using vertex position variable in the shader
-	glEnableVertexAttribArray(position_location);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(
-		position_location, // attribute (location of the position variable in our shader program)
-		3,                 // number of elements per vertex, here (x,y,z)
-		GL_FLOAT,          // the type of each element
-		GL_FALSE,          // take our values as-is
-		0,                 // no extra data between each position
-		0                  // offset of first element
-	);
+	if (position_location != -1) {
+        glEnableVertexAttribArray(position_location);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glVertexAttribPointer(
+            position_location,
+            3,                 // number of elements per vertex, here (x,y,z)
+            GL_FLOAT,          // the type of each element
+            GL_FALSE,          // take our values as-is
+            0,                 // no extra data between each position
+            0                  // offset of first element
+        );
+    }
 
-	// Find the location for our vertex-normal variable
-	int normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
-	if (normal_location == -1) {
-		cout << "Could not bind attribute vertex_normal" << endl;
-		return;
-	}
 	// Tell OpenGL we will be using vertex normal variable in the shader
-	glEnableVertexAttribArray(normal_location);
-	glBindBuffer(GL_ARRAY_BUFFER, nbo);
-	glVertexAttribPointer(
-		normal_location,   // attribute (location of the normal variable in our shader program)
-		3,                 // number of elements per vertex, here (x,y,z)
-		GL_FLOAT,          // the type of each element
-		GL_FALSE,          // take our values as-is
-		0,                 // no extra data between each position
-		0                  // offset of first element
-	);
+	int normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
+	if (normal_location != -1) {
+        glEnableVertexAttribArray(normal_location);
+        glBindBuffer(GL_ARRAY_BUFFER, nbo);
+        glVertexAttribPointer(
+            normal_location,
+            3,                 // number of elements per vertex, here (x,y,z)
+            GL_FLOAT,          // the type of each element
+            GL_FALSE,          // take our values as-is
+            0,                 // no extra data between each position
+            0                  // offset of first element
+        );
+    }
+
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
 	glDisableVertexAttribArray(position_location);
 	shader.Unbind();

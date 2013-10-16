@@ -1,22 +1,27 @@
 // Fragment Shader - acts at a per-pixel level
 #version 120
 
+varying vec4 position, vertex_color;
 varying vec3 normal;
 
 void main(void) {
-    vec3 n = normalize(normal);
-    float intensity = dot(vec3(gl_LightSource[0].position), n);
+    vec3 N = normalize(normal);
+    vec3 L = normalize(vec3(gl_LightSource[0].position - position));
 
-    vec4 color;
-    if (intensity > 0.95) {
-        color = vec4(0.99, 0.65, 0.24, 1.0);
-    } else if (intensity > 0.75) {
-        color = vec4(0.98, 0.43, 0.04, 1.0);
-    } else if (intensity > 0.25) {
-        color = vec4(0.79, 0.25, 0.04, 1.0);
+    float intensity = max(dot(N, L), 0.0);
+
+    vec4 discrete_color;
+    if (intensity > 0.98) {
+        discrete_color = vec4(1.0, 1.0, 1.0, 1.0);
+    } else if (intensity > 0.95) {
+        discrete_color = vertex_color;
+    } else if (intensity > 0.5) {
+        discrete_color = vertex_color * 0.7;
+    } else if (intensity > 0.05) {
+        discrete_color = vertex_color * 0.35;
     } else {
-        color = vec4(0.49, 0.21, 0.04, 1.0);
+        discrete_color = vertex_color * 0.2;
     }
 
-    gl_FragColor = color;
+    gl_FragColor = discrete_color;
 }

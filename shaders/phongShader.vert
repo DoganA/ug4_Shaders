@@ -22,9 +22,9 @@ void main(void) {
     reflection = gl_LightSource[0].halfVector.xyz;
     position = viewMatrix * modelMatrix * vertex;
 
-    ambient = vec4(materialAmbient, 1.0) * gl_LightSource[0].ambient;
+    ambient = vec4(materialAmbient, 1.0) * gl_LightSource[0].ambient;
     diffuse = vec4(materialDiffuse, 1.0) * gl_LightSource[0].diffuse;
-    ambientGlobal = vec4(materialAmbient, 1.0) * gl_LightModel.ambient;
+    ambientGlobal = vec4(materialAmbient, 1.0) * gl_LightModel.ambient;
 
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertex;
 }

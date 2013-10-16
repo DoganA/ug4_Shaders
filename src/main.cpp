@@ -93,15 +93,12 @@ glm::mat4 _get_projectionMatrix(void) {
                        windowY * 0.5f,
                       -1.0f, 400.0f);
 }
-
 glm::mat4 _get_viewMatrix(void) {
     return glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-300.0f));
 }
-
 glm::mat3 _get_normalMatrix(void) {
     return glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
 }
-
 glm::mat4 _get_modelMatrix(void) {
     return glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
 }

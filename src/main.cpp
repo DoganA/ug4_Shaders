@@ -16,8 +16,8 @@ float shininess             = 10;
 float constantAttenuation   = 0.1;
 float linearAttenuation     = 0.9;
 
-unsigned int vbo; // vertex position buffer object
-unsigned int nbo; // vertex normal buffer object
+unsigned int vertex_position_buffer_object;
+unsigned int vertex_normal_buffer_object;
 
 void cleanup() {
 }
@@ -60,7 +60,7 @@ void Display() {
 	int position_location = glGetAttribLocation(shader.ID(), "vertex_position");
 	if (position_location != -1) {
         glEnableVertexAttribArray(position_location);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
         glVertexAttribPointer(
             position_location,
             3,                 // number of elements per vertex, here (x,y,z)
@@ -75,7 +75,7 @@ void Display() {
 	int normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
 	if (normal_location != -1) {
         glEnableVertexAttribArray(normal_location);
-        glBindBuffer(GL_ARRAY_BUFFER, nbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);
         glVertexAttribPointer(
             normal_location,
             3,                 // number of elements per vertex, here (x,y,z)
@@ -140,15 +140,15 @@ void KeyBoardHandler(unsigned char key, int x, int y) {
 }
 
 // create a new Vertex Buffer Object, bind it and stream data to it
-void SetupVBO() {
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+void setup_vertex_position_buffer_object() {
+	glGenBuffers(1, &vertex_position_buffer_object);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
 	glBufferData(
         GL_ARRAY_BUFFER,                        // the target buffer object
 		sizeof(glm::vec3) * trig.VertexCount(), // size in bytes for the data
 		&trig.Vertices()[0],                    // pointer to the array of data
 		GL_STATIC_DRAW);
-	cout << "VBO generated!" << endl;
+	cout << "vertex_position_buffer_object generated!" << endl;
 }
 
 vector<glm::vec3> _smooth_normals() {
@@ -209,16 +209,16 @@ vector<glm::vec3> _rough_normals() {
     return normals;
 }
 
-void SetupNBO(bool smoothed) {
+void setup_vertex_normal_buffer_object(bool smoothed) {
     vector<glm::vec3> normals = smoothed ? _smooth_normals() : _rough_normals();
-    glGenBuffers(1, &nbo);
-    glBindBuffer(GL_ARRAY_BUFFER, nbo);
+    glGenBuffers(1, &vertex_normal_buffer_object);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);
     glBufferData(
         GL_ARRAY_BUFFER,
         sizeof(glm::vec3) * normals.size(),
         &normals[0],
         GL_STATIC_DRAW);
-    cout << "NBO generated!" << endl;
+    cout << "vertex_normal_buffer_object generated!" << endl;
 }
 
 int main(int argc, char **argv) {
@@ -260,8 +260,8 @@ int main(int argc, char **argv) {
 	// create shader, prepare data for OpenGL
     trig.LoadFile(model_path);
 	shader.Init(vertexshader_path, fragmentshader_path);
-	SetupVBO();
-    SetupNBO(use_smoothed_normals);
+	setup_vertex_position_buffer_object();
+    setup_vertex_normal_buffer_object(use_smoothed_normals);
 	// set up camera and object transformation matrices
 	projectionMatrix = _get_projectionMatrix();
 	viewMatrix = _get_viewMatrix();

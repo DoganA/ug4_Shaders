@@ -26,6 +26,6 @@ Compile and run with `make toon`
 
 ###  Camera movement
 
-Use `q w e r t y` to translate in +/- direction around the three axies.
+Use `q w e r t y` to translate in +/- direction around the three axes
 
-Use `a s d f g h` to rotate in +/- direction around the three axies
+Use `a s d f g h` to rotate in +/- direction around the three axes

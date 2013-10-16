@@ -102,7 +102,6 @@ glm::mat4 _get_viewMatrix(void) {
 void DemoKeyboardHandler(unsigned char key, int x, int y) {
     glm::vec3 translation = glm::vec3(0, 0, 0);
     glm::vec3 rotation = glm::vec3(0, 0, 0);
-
     switch (key) {
         case 'q': translation = glm::vec3( 1, 0, 0); break;
         case 'w': translation = glm::vec3(-1, 0, 0); break;
@@ -110,23 +109,19 @@ void DemoKeyboardHandler(unsigned char key, int x, int y) {
         case 'r': translation = glm::vec3( 0,-1, 0); break;
         case 't': translation = glm::vec3( 0, 0, 1); break;
         case 'y': translation = glm::vec3( 0, 0,-1); break;
-
         case 'a': rotation = glm::vec3( 1, 0, 0); break;
         case 's': rotation = glm::vec3(-1, 0, 0); break;
         case 'd': rotation = glm::vec3( 0, 1, 0); break;
         case 'f': rotation = glm::vec3( 0,-1, 0); break;
         case 'g': rotation = glm::vec3( 0, 0, 1); break;
         case 'h': rotation = glm::vec3( 0, 0,-1); break;
-
         case ' ': viewMatrix = _get_viewMatrix(); break;
     }
-
     if (translation.x != 0 || translation.y != 0 || translation.z != 0) {
         viewMatrix = glm::translate(viewMatrix, translation);
     } else if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0) {
-        viewMatrix = glm::rotate(viewMatrix, 10.0f, rotation);
+        viewMatrix = glm::rotate(viewMatrix, 1.0f, rotation);
     }
-
     DemoDisplay();
 }
 

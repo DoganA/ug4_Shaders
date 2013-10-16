@@ -7,9 +7,7 @@ float windowX = 640.0f;
 float windowY = 480.0f;
 TriangleMesh trig;
 Shader shader;
-glm::mat4 projectionMatrix;
-glm::mat4 viewMatrix;
-glm::mat4 modelMatrix;
+glm::mat4 projectionMatrix, viewMatrix, modelMatrix;
 
 unsigned int vbo; // vertex position buffer object
 unsigned int nbo; // vertex normal buffer object
@@ -29,25 +27,25 @@ void DemoDisplay() {
 	shader.Bind();
 
 	// Find the location of our uniform variables in the current shader program
-	int projectMatrixLocation = glGetUniformLocation(shader.ID(), "projectionMatrix");
-	int viewMatrixLocation = glGetUniformLocation(shader.ID(), "viewMatrix");
-	int modelMatrixLocation = glGetUniformLocation(shader.ID(), "modelMatrix");
+	int projectionMatrix_location = glGetUniformLocation(shader.ID(), "projectionMatrix");
+	int viewMatrix_location = glGetUniformLocation(shader.ID(), "viewMatrix");
+	int modelMatrix_location = glGetUniformLocation(shader.ID(), "modelMatrix");
 	// Pass the current values for our variables to the shader program
-	glUniformMatrix4fv(projectMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
-	glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
-	glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
+	glUniformMatrix4fv(projectionMatrix_location, 1, GL_FALSE, &projectionMatrix[0][0]);
+	glUniformMatrix4fv(viewMatrix_location, 1, GL_FALSE, &viewMatrix[0][0]);
+	glUniformMatrix4fv(modelMatrix_location, 1, GL_FALSE, &modelMatrix[0][0]);
 
 	// Find the location for our vertex position variable
-	int positionLocation = glGetAttribLocation(shader.ID(), "vertex_position");
-	if (positionLocation == -1) {
+	int position_location = glGetAttribLocation(shader.ID(), "vertex_position");
+	if (position_location == -1) {
 		cout << "Could not bind attribute vertex_position" << endl;
 		return;
 	}
 	// Tell OpenGL we will be using vertex position variable in the shader
-	glEnableVertexAttribArray(positionLocation);
+	glEnableVertexAttribArray(position_location);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glVertexAttribPointer(
-		positionLocation,  // attribute (location of the position variable in our shader program)
+		position_location, // attribute (location of the position variable in our shader program)
 		3,                 // number of elements per vertex, here (x,y,z)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
@@ -56,16 +54,16 @@ void DemoDisplay() {
 	);
 
 	// Find the location for our vertex-normal variable
-	int normalLocation = glGetAttribLocation(shader.ID(), "vertex_normal");
-	if (normalLocation == -1) {
+	int normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
+	if (normal_location == -1) {
 		cout << "Could not bind attribute vertex_normal" << endl;
 		return;
 	}
 	// Tell OpenGL we will be using vertex normal variable in the shader
-	glEnableVertexAttribArray(normalLocation);
+	glEnableVertexAttribArray(normal_location);
 	glBindBuffer(GL_ARRAY_BUFFER, nbo);
 	glVertexAttribPointer(
-		normalLocation,    // attribute (location of the normal variable in our shader program)
+		normal_location,   // attribute (location of the normal variable in our shader program)
 		3,                 // number of elements per vertex, here (x,y,z)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
@@ -73,7 +71,7 @@ void DemoDisplay() {
 		0                  // offset of first element
 	);
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
-	glDisableVertexAttribArray(positionLocation);
+	glDisableVertexAttribArray(position_location);
 	shader.Unbind();
 	glFlush();
 }

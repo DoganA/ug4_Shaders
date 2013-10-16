@@ -97,6 +97,13 @@ void DemoDisplay() {
 	glFlush();
 }
 
+glm::mat4 _get_projectionMatrix(void) {
+    return glm::ortho(-windowX * 0.5f,
+                       windowX * 0.5f,
+                      -windowY * 0.5f,
+                       windowY * 0.5f,
+                      -1.0f, 400.0f);
+}
 
 glm::mat4 _get_viewMatrix(void) {
     return glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-300.0f));
@@ -273,7 +280,7 @@ int main(int argc, char **argv) {
 	SetupVBO();
     SetupNBO(use_smoothed_normals);
 	// set up camera and object transformation matrices
-	projectionMatrix = glm::ortho(-windowX*0.5f, windowX*0.5f, -windowY*0.5f,  windowY*0.5f, -1.0f, 400.0f);
+	projectionMatrix = _get_projectionMatrix();
 	viewMatrix = _get_viewMatrix();
 	modelMatrix = _get_modelMatrix();
     normalMatrix = _get_normalMatrix();

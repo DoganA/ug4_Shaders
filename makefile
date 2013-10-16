@@ -39,5 +39,11 @@ toon: compile
 		$(SHADERS)/toonShader.frag \
 		1
 
+depth: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/depthShader.vert \
+		$(SHADERS)/depthShader.frag \
+		1
+
 clean:
 	rm -f $(BIN)/*

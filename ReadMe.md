@@ -24,6 +24,12 @@ Compile and run with `make toon`
 
 ![toon shading screenshot](doc/toon.png)
 
+###  Depth shading
+
+Compile and run with `make depth`
+
+![depth shading screenshot](doc/depth.png)
+
 ###  Camera movement
 
 Use `q w e r t y` to translate in +/- direction around the three axes

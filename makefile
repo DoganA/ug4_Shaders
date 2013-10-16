@@ -23,6 +23,12 @@ gouraud: compile
 		$(SHADERS)/simpleShader.frag \
 		1
 
+phong: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/phongShader.vert \
+		$(SHADERS)/phongShader.frag \
+		1
+
 toon: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \
 		$(SHADERS)/toonShader.vert \

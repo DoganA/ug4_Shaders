@@ -4,25 +4,25 @@
 
 Compile and run with `make flat`
 
-![flat shading screenshot]("doc/flat.png")
+![flat shading screenshot](doc/flat.png)
 
 ###  Gouraud shading
 
 Compile and run with `make gouraud`
 
-![gouraud shading screenshot]("doc/gouraud.png")
+![gouraud shading screenshot](doc/gouraud.png)
 
 ###  Phong shading
 
 Compile and run with `make phong`
 
-![phong shading screenshot]("doc/phong.png")
+![phong shading screenshot](doc/phong.png)
 
 ###  Toon shading
 
 Compile and run with `make toon`
 
-![toon shading screenshot]("doc/toon.png")
+![toon shading screenshot](doc/toon.png)
 
 ###  Camera movement
 

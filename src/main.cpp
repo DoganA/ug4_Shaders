@@ -1,4 +1,4 @@
-#include "demo1.h"
+#include "main.h"
 #include "Shader.h"
 #include <map>
 
@@ -28,7 +28,7 @@ void cleanup() {
 //   1) Clear the screen so we can draw a new frame
 //   2) Calculate the vertex points for each triangle and draw them
 //   3) Flush the pipeline so that the instructions we gave are performed.
-void DemoDisplay() {
+void Display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1,1,1);
 	shader.Bind();
@@ -117,7 +117,7 @@ glm::mat4 _get_modelMatrix(void) {
     return glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
 }
 
-void DemoKeyboardHandler(unsigned char key, int x, int y) {
+void KeyBoardHandler(unsigned char key, int x, int y) {
     glm::vec3 translation = glm::vec3(0, 0, 0);
     glm::vec3 rotation = glm::vec3(0, 0, 0);
     switch (key) {
@@ -141,7 +141,7 @@ void DemoKeyboardHandler(unsigned char key, int x, int y) {
         viewMatrix = glm::rotate(viewMatrix, 1.0f, rotation);
     }
     normalMatrix = _get_normalMatrix();
-    DemoDisplay();
+    Display();
 }
 
 // create a new Vertex Buffer Object, bind it and stream data to it
@@ -240,7 +240,7 @@ void SetupNBO(bool smoothed) {
 
 int main(int argc, char **argv) {
 	atexit(cleanup);
-    cout << "Computer Graphics Assignment 1 Demo Program" << endl;
+    cout << "Computer Graphics Assignment 1" << endl;
     char *model_path;
     char *vertexshader_path;
     char *fragmentshader_path;
@@ -262,8 +262,8 @@ int main(int argc, char **argv) {
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
     glEnable(GL_DEPTH_TEST);
     // set display/keyboard callbacks
-	glutDisplayFunc(DemoDisplay);
-    glutKeyboardFunc(DemoKeyboardHandler);
+	glutDisplayFunc(Display);
+    glutKeyboardFunc(KeyBoardHandler);
 	// initialise the OpenGL Extension Wrangler library for VBOs
 	GLenum err = glewInit();
 	if (err != GLEW_OK){

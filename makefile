@@ -7,7 +7,7 @@ SRC=./src
 BIN=./bin
 RES=./res
 SHADERS=./shaders
-PROG=demo1
+PROG=main
 
 bindir:
 	$(MKDIR) -p $(BIN)

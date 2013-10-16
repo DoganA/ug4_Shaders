@@ -15,6 +15,8 @@ float diffuseReflectance[3]  = {0.85, 0.85, 0.85};
 float specularIntensity[3]   = {0.95, 0.95, 0.95};
 float specularReflectance[3] = {0.99, 0.99, 0.99};
 float shininess              = 100;
+float constantAttenuation    = 1;
+float linearAttenuation      = 0.8;
 
 unsigned int vbo; // vertex position buffer object
 unsigned int nbo; // vertex normal buffer object
@@ -44,6 +46,8 @@ void DemoDisplay() {
 	int specularIntensity_location = glGetUniformLocation(shader.ID(), "specularIntensity");
 	int specularReflectance_location = glGetUniformLocation(shader.ID(), "specularReflectance");
 	int shininess_location = glGetUniformLocation(shader.ID(), "shininess");
+	int constantAttenuation_location = glGetUniformLocation(shader.ID(), "constantAttenuation");
+	int linearAttenuation_location = glGetUniformLocation(shader.ID(), "linearAttenuation");
 	// Pass the current values for our variables to the shader program
 	glUniformMatrix4fv(projectionMatrix_location, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrix_location, 1, GL_FALSE, &viewMatrix[0][0]);
@@ -55,6 +59,8 @@ void DemoDisplay() {
     glUniform3fv(specularIntensity_location, 1, specularIntensity);
     glUniform3fv(specularReflectance_location, 1, specularReflectance);
     glUniform1f(shininess_location, shininess);
+    glUniform1f(constantAttenuation_location, constantAttenuation);
+    glUniform1f(linearAttenuation_location, linearAttenuation);
 
 	// Find the location for our vertex position variable
 	int position_location = glGetAttribLocation(shader.ID(), "vertex_position");

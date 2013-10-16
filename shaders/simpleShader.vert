@@ -5,7 +5,7 @@ uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform vec3 ambientReflectance, ambientIntensity;
 uniform vec3 diffuseReflectance, diffuseIntensity;
 uniform vec3 specularReflectance, specularIntensity;
-uniform float shininess;
+uniform float shininess, constantAttenuation, linearAttenuation;
 
 attribute vec3 vertex_position, vertex_normal;
 varying vec3 vertex_color;
@@ -23,6 +23,9 @@ void main(void) {
     float cosAlpha = cosTheta > 0.0 ? max(dot(N, R), 0.0) : 0.0f;
     vec3 specular = specularIntensity * specularReflectance * pow(cosAlpha, shininess);
 
-    vertex_color = ambient + diffuse + specular;
+    float dist = length(L);
+    float attenuation = 1.0 / (constantAttenuation + dist * linearAttenuation);
+
+    vertex_color = ambient + attenuation * (diffuse + specular);
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex_position, 1.0);
 }

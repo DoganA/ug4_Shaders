@@ -2,16 +2,13 @@
 #version 120
 
 uniform vec3 specularReflectance, specularIntensity;
-uniform float shininess;
+uniform float shininess, constantAttenuation, linearAttenuation;
 
 varying vec4 diffuse, ambientGlobal, ambient, position;
 varying vec3 normal, reflection;
 
 void main(void) {
     vec3 materialSpecular = specularReflectance * specularIntensity;
-
-    float constantAttenuation = 50;
-    float linearAttenuation = 0.8;
 
     vec4 color = ambientGlobal;
     vec3 N = normalize(normal);

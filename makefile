@@ -1,5 +1,6 @@
 CC=g++
 LIBS=-lGLEW -lGLU -lGL -lglut
+MKDIR=mkdir
 
 LIB=./lib
 SRC=./src
@@ -8,8 +9,11 @@ RES=./res
 SHADERS=./shaders
 PROG=demo1
 
-compile:
-	g++ -o $(BIN)/$(PROG) $(SRC)/*.cpp $(LIBS) -I$(LIB)
+bindir:
+	$(MKDIR) -p $(BIN)
+
+compile: bindir
+	$(CC) -o $(BIN)/$(PROG) $(SRC)/*.cpp $(LIBS) -I$(LIB)
 
 flat: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \

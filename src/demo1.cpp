@@ -8,6 +8,13 @@ float windowY = 480.0f;
 TriangleMesh trig;
 Shader shader;
 glm::mat4 projectionMatrix, viewMatrix, modelMatrix;
+float ambientIntensity[3]    = {1.00, 0.50, 0.00};
+float ambientReflectance[3]  = {0.50, 0.50, 0.50};
+float diffuseIntensity[3]    = {0.50, 0.50, 0.50};
+float diffuseReflectance[3]  = {0.85, 0.85, 0.85};
+float specularIntensity[3]   = {0.95, 0.95, 0.95};
+float specularReflectance[3] = {0.99, 0.99, 0.99};
+float shininess              = 100;
 
 unsigned int vbo; // vertex position buffer object
 unsigned int nbo; // vertex normal buffer object
@@ -30,10 +37,24 @@ void DemoDisplay() {
 	int projectionMatrix_location = glGetUniformLocation(shader.ID(), "projectionMatrix");
 	int viewMatrix_location = glGetUniformLocation(shader.ID(), "viewMatrix");
 	int modelMatrix_location = glGetUniformLocation(shader.ID(), "modelMatrix");
+	int ambientIntensity_location = glGetUniformLocation(shader.ID(), "ambientIntensity");
+	int ambientReflectance_location = glGetUniformLocation(shader.ID(), "ambientReflectance");
+	int diffuseIntensity_location = glGetUniformLocation(shader.ID(), "diffuseIntensity");
+	int diffuseReflectance_location = glGetUniformLocation(shader.ID(), "diffuseReflectance");
+	int specularIntensity_location = glGetUniformLocation(shader.ID(), "specularIntensity");
+	int specularReflectance_location = glGetUniformLocation(shader.ID(), "specularReflectance");
+	int shininess_location = glGetUniformLocation(shader.ID(), "shininess");
 	// Pass the current values for our variables to the shader program
 	glUniformMatrix4fv(projectionMatrix_location, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrix_location, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(modelMatrix_location, 1, GL_FALSE, &modelMatrix[0][0]);
+    glUniform3fv(ambientIntensity_location, 1, ambientIntensity);
+    glUniform3fv(ambientReflectance_location, 1, ambientReflectance);
+    glUniform3fv(diffuseIntensity_location, 1, diffuseIntensity);
+    glUniform3fv(diffuseReflectance_location, 1, diffuseReflectance);
+    glUniform3fv(specularIntensity_location, 1, specularIntensity);
+    glUniform3fv(specularReflectance_location, 1, specularReflectance);
+    glUniform1f(shininess_location, shininess);
 
 	// Find the location for our vertex position variable
 	int position_location = glGetAttribLocation(shader.ID(), "vertex_position");

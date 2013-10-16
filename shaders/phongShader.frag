@@ -1,14 +1,14 @@
 // Fragment Shader - acts at a per-pixel level
 #version 120
 
+uniform vec3 specularReflectance, specularIntensity;
+uniform float shininess;
+
 varying vec4 diffuse, ambientGlobal, ambient, position;
 varying vec3 normal, reflection;
 
 void main(void) {
-    vec3 Is = vec3(0.95, 0.95, 0.95); // specular light intensity
-    vec3 ks = vec3(0.99, 0.99, 0.99); // specular reflectance
-    float n = 100; // shiny reflectance of object
-    vec4 materialSpecular = vec4(Is * ks, 1.0);
+    vec3 materialSpecular = specularReflectance * specularIntensity;
 
     float constantAttenuation = 50;
     float linearAttenuation = 0.8;
@@ -25,9 +25,9 @@ void main(void) {
     if (cosTheta > 0.0) {
         color += attenuation * (diffuse * cosTheta + ambient);
         color +=   attenuation
-                 * materialSpecular
+                 * vec4(materialSpecular, 1.0)
                  * gl_LightSource[0].specular
-                 * pow(cosAlpha, n);
+                 * pow(cosAlpha, shininess);
     }
 
     gl_FragColor = color;

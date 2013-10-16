@@ -2,6 +2,7 @@
 #version 120
 
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
+uniform mat3 normalMatrix;
 uniform vec3 materialAmbient, materialDiffuse, materialSpecular;
 uniform float shininess, constantAttenuation, linearAttenuation;
 
@@ -12,7 +13,7 @@ varying vec3 normal;
 void main(void) {
     vec4 vertex = vec4(vertex_position, 1.0);
 
-    normal = normalize(gl_NormalMatrix * vertex_normal);
+    normal = normalize(normalMatrix * vertex_normal);
     position = viewMatrix * modelMatrix * vertex;
     vertex_color = vec4(materialAmbient, 1.0);
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertex;

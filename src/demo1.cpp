@@ -8,12 +8,13 @@ float windowY = 480.0f;
 TriangleMesh trig;
 Shader shader;
 glm::mat4 projectionMatrix, viewMatrix, modelMatrix;
+glm::mat3 normalMatrix;
 float materialAmbient[3]    = {1.00, 0.50, 0.00};
 float materialDiffuse[3]    = {0.50, 0.50, 0.50};
 float materialSpecular[3]   = {0.95, 0.95, 0.95};
-float shininess              = 100;
-float constantAttenuation    = 1;
-float linearAttenuation      = 0.8;
+float shininess             = 100;
+float constantAttenuation   = 1;
+float linearAttenuation     = 0.8;
 
 unsigned int vbo; // vertex position buffer object
 unsigned int nbo; // vertex normal buffer object
@@ -36,6 +37,7 @@ void DemoDisplay() {
 	int projectionMatrix_location = glGetUniformLocation(shader.ID(), "projectionMatrix");
 	int viewMatrix_location = glGetUniformLocation(shader.ID(), "viewMatrix");
 	int modelMatrix_location = glGetUniformLocation(shader.ID(), "modelMatrix");
+	int normalMatrix_location = glGetUniformLocation(shader.ID(), "normalMatrix");
 	int materialAmbient_location = glGetUniformLocation(shader.ID(), "materialAmbient");
 	int materialDiffuse_location = glGetUniformLocation(shader.ID(), "materialDiffuse");
 	int materialSpecular_location = glGetUniformLocation(shader.ID(), "materialSpecular");
@@ -46,6 +48,7 @@ void DemoDisplay() {
 	glUniformMatrix4fv(projectionMatrix_location, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrix_location, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(modelMatrix_location, 1, GL_FALSE, &modelMatrix[0][0]);
+	glUniformMatrix3fv(normalMatrix_location, 1, GL_FALSE, &normalMatrix[0][0]);
     glUniform3fv(materialAmbient_location, 1, materialAmbient);
     glUniform3fv(materialDiffuse_location, 1, materialDiffuse);
     glUniform3fv(materialSpecular_location, 1, materialSpecular);
@@ -99,6 +102,14 @@ glm::mat4 _get_viewMatrix(void) {
     return glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-300.0f));
 }
 
+glm::mat3 _get_normalMatrix(void) {
+    return glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
+}
+
+glm::mat4 _get_modelMatrix(void) {
+    return glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
+}
+
 void DemoKeyboardHandler(unsigned char key, int x, int y) {
     glm::vec3 translation = glm::vec3(0, 0, 0);
     glm::vec3 rotation = glm::vec3(0, 0, 0);
@@ -122,6 +133,7 @@ void DemoKeyboardHandler(unsigned char key, int x, int y) {
     } else if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0) {
         viewMatrix = glm::rotate(viewMatrix, 1.0f, rotation);
     }
+    normalMatrix = _get_normalMatrix();
     DemoDisplay();
 }
 
@@ -262,7 +274,8 @@ int main(int argc, char **argv) {
 	// set up camera and object transformation matrices
 	projectionMatrix = glm::ortho(-windowX*0.5f, windowX*0.5f, -windowY*0.5f,  windowY*0.5f, -1.0f, 400.0f);
 	viewMatrix = _get_viewMatrix();
-	modelMatrix = glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
+	modelMatrix = _get_modelMatrix();
+    normalMatrix = _get_normalMatrix();
 	glutMainLoop();
 }
 

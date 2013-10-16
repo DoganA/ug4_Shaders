@@ -2,6 +2,7 @@
 #version 120
 
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
+uniform mat3 normalMatrix;
 uniform vec3 materialAmbient, materialDiffuse, materialSpecular;
 uniform float shininess, constantAttenuation, linearAttenuation;
 
@@ -13,7 +14,7 @@ void main(void) {
     vec4 ambient = vec4(materialAmbient, 1.0) * gl_LightSource[0].ambient;
     vec4 diffuse = vec4(materialDiffuse, 1.0) * gl_LightSource[0].diffuse;
 
-    vec3 N = normalize(gl_NormalMatrix * vertex_normal); // normal
+    vec3 N = normalize(normalMatrix * vertex_normal); // normal
     vec3 R = gl_LightSource[0].halfVector.xyz; // reflection
     vec3 L = normalize(vec3(gl_LightSource[0].position)); // light
 

@@ -2,6 +2,7 @@
 #version 120
 
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
+uniform mat3 normalMatrix;
 uniform vec3 materialAmbient, materialDiffuse;
 
 attribute vec3 vertex_position, vertex_normal;
@@ -11,7 +12,7 @@ varying vec3 normal, reflection;
 void main(void) {
     vec4 vertex = vec4(vertex_position, 1.0);
 
-    normal = normalize(gl_NormalMatrix * vertex_normal);
+    normal = normalize(normalMatrix * vertex_normal);
     reflection = gl_LightSource[0].halfVector.xyz;
     position = viewMatrix * modelMatrix * vertex;
 

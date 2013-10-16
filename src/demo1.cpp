@@ -10,11 +10,11 @@ Shader shader;
 glm::mat4 projectionMatrix, viewMatrix, modelMatrix;
 glm::mat3 normalMatrix;
 float materialAmbient[3]    = {1.00, 0.50, 0.00};
-float materialDiffuse[3]    = {0.50, 0.50, 0.50};
-float materialSpecular[3]   = {0.95, 0.95, 0.95};
-float shininess             = 100;
-float constantAttenuation   = 1;
-float linearAttenuation     = 0.8;
+float materialDiffuse[3]    = {0.55, 0.55, 0.55};
+float materialSpecular[3]   = {0.99, 0.99, 0.99};
+float shininess             = 10;
+float constantAttenuation   = 0.1;
+float linearAttenuation     = 0.9;
 
 unsigned int vbo; // vertex position buffer object
 unsigned int nbo; // vertex normal buffer object

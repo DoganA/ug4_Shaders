@@ -156,18 +156,6 @@ void SetupVBO() {
 	cout << "VBO generated!" << endl;
 }
 
-vector<double> to_vector(glm::vec3 v_vec3) {
-    vector<double> v_vector;
-    v_vector.push_back(v_vec3.x);
-    v_vector.push_back(v_vec3.y);
-    v_vector.push_back(v_vec3.z);
-    return v_vector;
-}
-
-glm::vec3 to_vec3(vector<double> v_vector) {
-    return glm::vec3(v_vector[0], v_vector[1], v_vector[2]);
-}
-
 vector<glm::vec3> _smooth_normals() {
     vector<glm::vec3> vertices = trig.Vertices();
     // initialize map of normals to zero

@@ -151,66 +151,58 @@ void setup_vertex_position_buffer_object() {
 	cout << "vertex_position_buffer_object generated!" << endl;
 }
 
-vector<glm::vec3> _smooth_normals() {
-    vector<glm::vec3> vertices = trig.Vertices();
-    // initialize map of normals to zero
-    map< vector<double>, vector<double> > normal_map;
-    for (int i = 0; i < vertices.size(); i++) {
-        vector<double> zeros;
-        zeros.push_back(0.0);
-        zeros.push_back(0.0);
-        zeros.push_back(0.0);
-        normal_map[to_vector(vertices[i])] = zeros;
-    }
-    for (int i = 0; i < vertices.size(); i += 3) {
-        // get vertices of this triangle
-        glm::vec3 v1 = vertices[i];
-        glm::vec3 v2 = vertices[i + 1];
-        glm::vec3 v3 = vertices[i + 2];
-        vector<double> v1_key = to_vector(v1);
-        vector<double> v2_key = to_vector(v2);
-        vector<double> v3_key = to_vector(v3);
-        // compute face normal
-        glm::vec3 face_normal = glm::cross(v3 - v2, v1 - v2);
-        // get the old vertex normal
-        glm::vec3 v1_old = to_vec3(normal_map[v1_key]);
-        glm::vec3 v2_old = to_vec3(normal_map[v2_key]);
-        glm::vec3 v3_old = to_vec3(normal_map[v3_key]);
-        // replace the old value with the new value
-        normal_map.erase(v1_key);
-        normal_map.erase(v2_key);
-        normal_map.erase(v3_key);
-        normal_map[v1_key] = to_vector(glm::normalize(v1_old + face_normal));
-        normal_map[v2_key] = to_vector(glm::normalize(v2_old + face_normal));
-        normal_map[v3_key] = to_vector(glm::normalize(v3_old + face_normal));
-    }
-    // convert the map of normals to a vector of normals
-    vector<glm::vec3> normals;
-    for (int i = 0; i < vertices.size(); i++) {
-        normals.push_back(to_vec3(normal_map[to_vector(vertices[i])]));
-    }
-    return normals;
-}
-
-vector<glm::vec3> _rough_normals() {
-    vector<glm::vec3> vertices = trig.Vertices();
-    vector<glm::vec3> normals;
-    for (int i = 0; i < vertices.size(); i += 3) {
-        // get vertices of this triangle
-        glm::vec3 v1 = vertices[i];
-        glm::vec3 v2 = vertices[i + 1];
-        glm::vec3 v3 = vertices[i + 2];
-        // compute face normal
-        glm::vec3 face_normal = glm::cross(v3 - v2, v1 - v2);
-        normals.push_back(glm::normalize(face_normal));
-        normals.push_back(glm::normalize(face_normal));
-        normals.push_back(glm::normalize(face_normal));
-    }
-    return normals;
-}
-
 void setup_vertex_normal_buffer_object(bool smoothed) {
-    vector<glm::vec3> normals = smoothed ? _smooth_normals() : _rough_normals();
+    vector<glm::vec3> vertices = trig.Vertices();
+    vector<glm::vec3> normals;
+    if (smoothed) {
+        // initialize map of normals to zero
+        map< vector<double>, vector<double> > normal_map;
+        for (int i = 0; i < vertices.size(); i++) {
+            vector<double> zeros;
+            zeros.push_back(0.0);
+            zeros.push_back(0.0);
+            zeros.push_back(0.0);
+            normal_map[to_vector(vertices[i])] = zeros;
+        }
+        for (int i = 0; i < vertices.size(); i += 3) {
+            // get vertices of this triangle
+            glm::vec3 v1 = vertices[i];
+            glm::vec3 v2 = vertices[i + 1];
+            glm::vec3 v3 = vertices[i + 2];
+            vector<double> v1_key = to_vector(v1);
+            vector<double> v2_key = to_vector(v2);
+            vector<double> v3_key = to_vector(v3);
+            // compute face normal
+            glm::vec3 face_normal = glm::cross(v3 - v2, v1 - v2);
+            // get the old vertex normal
+            glm::vec3 v1_old = to_vec3(normal_map[v1_key]);
+            glm::vec3 v2_old = to_vec3(normal_map[v2_key]);
+            glm::vec3 v3_old = to_vec3(normal_map[v3_key]);
+            // replace the old value with the new value
+            normal_map.erase(v1_key);
+            normal_map.erase(v2_key);
+            normal_map.erase(v3_key);
+            normal_map[v1_key] = to_vector(glm::normalize(v1_old + face_normal));
+            normal_map[v2_key] = to_vector(glm::normalize(v2_old + face_normal));
+            normal_map[v3_key] = to_vector(glm::normalize(v3_old + face_normal));
+        }
+        // convert the map of normals to a vector of normals
+        for (int i = 0; i < vertices.size(); i++) {
+            normals.push_back(to_vec3(normal_map[to_vector(vertices[i])]));
+        }
+    } else {
+        for (int i = 0; i < vertices.size(); i += 3) {
+            // get vertices of this triangle
+            glm::vec3 v1 = vertices[i];
+            glm::vec3 v2 = vertices[i + 1];
+            glm::vec3 v3 = vertices[i + 2];
+            // compute face normal
+            glm::vec3 face_normal = glm::cross(v3 - v2, v1 - v2);
+            normals.push_back(glm::normalize(face_normal));
+            normals.push_back(glm::normalize(face_normal));
+            normals.push_back(glm::normalize(face_normal));
+        }
+    }
     glGenBuffers(1, &vertex_normal_buffer_object);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);
     glBufferData(

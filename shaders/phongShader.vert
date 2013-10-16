@@ -2,8 +2,7 @@
 #version 120
 
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
-uniform vec3 ambientReflectance, ambientIntensity;
-uniform vec3 diffuseReflectance, diffuseIntensity;
+uniform vec3 materialAmbient, materialDiffuse;
 
 attribute vec3 vertex_position, vertex_normal;
 varying vec4 diffuse, ambientGlobal, ambient, position;
@@ -11,9 +10,6 @@ varying vec3 normal, reflection;
 
 void main(void) {
     vec4 vertex = vec4(vertex_position, 1.0);
-
-    vec3 materialAmbient = ambientIntensity * ambientReflectance;
-    vec3 materialDiffuse = diffuseIntensity * diffuseReflectance;
 
     normal = normalize(gl_NormalMatrix * vertex_normal);
     reflection = gl_LightSource[0].halfVector.xyz;

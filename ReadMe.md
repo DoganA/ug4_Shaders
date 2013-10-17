@@ -87,3 +87,5 @@ Compile and run with `make environment`
 Use `q w e r t y` to translate in +/- direction around the three axes
 
 Use `a s d f g h` to rotate in +/- direction around the three axes
+
+Use space to restore the default perspective.

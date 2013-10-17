@@ -37,7 +37,7 @@ Compile and run with `make flat`
 
 ![flat shading screen-shot](doc/flat.png)
 
-###  Gouraud shading
+### Gouraud shading
 Same as Flat shading but the vertex normals are computed by averaging over the
 normals of adjacent faces.
 
@@ -45,7 +45,7 @@ Compile and run with `make gouraud`
 
 ![gouraud shading screen-shot](doc/gouraud.png)
 
-###  Phong shading
+### Phong shading
 The vertex shader computes ambient and diffuse intensities. The fragment shader
 computes attenuation and specularities and interpolates everything.
 
@@ -53,7 +53,7 @@ Compile and run with `make phong`
 
 ![phong shading screen-shot](doc/phong.png)
 
-###  Toon shading
+### Toon shading
 The vertex shader computes colors based on material properties. The fragment
 shader computes how much light is reflected from each pixel and discretizes the
 color into bins accordingly.
@@ -62,7 +62,7 @@ Compile and run with `make toon`
 
 ![toon shading screen-shot](doc/toon.png)
 
-###  Depth shading
+### Depth shading
 The vertex shader computes the z-position of each vertex in 3-d space. The
 fragment shader Colo's pixels relative to this depth.
 
@@ -70,7 +70,7 @@ Compile and run with `make depth`
 
 ![depth shading screen-shot](doc/depth.png)
 
-###  Texturing
+### Texturing
 Same as Flat/Gouraud/Phong shading but the fragment shader interpolates pixel
 colors with colors from an image.
 
@@ -78,7 +78,7 @@ Compile and run with `make texture-{flat,gouraud,phong}`
 
 ![texturing screen-shot](doc/texture-phong.png)
 
-###  Bump mapping
+### Bump mapping
 Same as Phong shading but the normal vectors are perturbed by a bump-map and the
 tangent and binormal vectors before the lighting calculation. The tangent and
 binormal vectors are approximated in the vertex shader.
@@ -87,7 +87,7 @@ Compile and run with `make bump`
 
 ![bump mapping screen-shot](doc/bump.png)
 
-###  Environment mapping
+### Environment mapping
 Same as textured Phong shading but the texture is drawn from a spherical map and
 mapped onto the object by considering the reflection vector at each pixel rather
 than UV coordinates.
@@ -96,7 +96,7 @@ Compile and run with `make environment`
 
 ![environment mapping screen-shot](doc/environment.png)
 
-###  Camera movement
+### Camera movement
 
 Use `q w e r t y` to translate in +/- direction around the three axes.
 

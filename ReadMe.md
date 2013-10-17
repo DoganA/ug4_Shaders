@@ -74,9 +74,9 @@ Compile and run with `make texture-{flat,gouraud,phong}`
 ![texturing screen-shot](doc/texture-phong.png)
 
 ###  Environment mapping
-Same as Phong shading mixed in with texturing but the texture is drawn from a
-spherical map and mapped onto the object by considering the reflection vector at
-each pixel rather than UV coordinates.
+Same as textured Phong shading but the texture is drawn from a spherical map and
+mapped onto the object by considering the reflection vector at each pixel rather
+than UV coordinates.
 
 Compile and run with `make environment`
 

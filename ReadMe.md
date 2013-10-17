@@ -110,3 +110,5 @@ shader being used. Its responsibility is to load the object mesh, shaders and
 textures, compute vertex normals and run the display loop. The shader
 architecture is similarly modular: each shader in the *shaders* directory has
 one and only one function.
+
+More low-level implementation details are discussed via comments in the code.

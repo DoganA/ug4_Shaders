@@ -15,6 +15,11 @@ float materialSpecular[3]   = {0.99, 0.99, 0.99};
 float shininess             = 10;
 float constantAttenuation   = 0.1;
 float linearAttenuation     = 0.9;
+float lightPosition[3]      = {0.0, 0.0, 2.0};
+float lightAmbient[3]       = {0.99, 0.99, 0.99};
+float lightDiffuse[3]       = {0.99, 0.99, 0.99};
+float lightSpecular[3]      = {0.99, 0.99, 0.99};
+float lightGlobal[3]        = {0.99, 0.99, 0.99};
 
 unsigned int vertex_position_buffer_object;
 unsigned int vertex_normal_buffer_object;
@@ -36,6 +41,11 @@ void display_handler() {
 	int materialAmbient_location = glGetUniformLocation(shader.ID(), "materialAmbient");
 	int materialDiffuse_location = glGetUniformLocation(shader.ID(), "materialDiffuse");
 	int materialSpecular_location = glGetUniformLocation(shader.ID(), "materialSpecular");
+	int lightPosition_location = glGetUniformLocation(shader.ID(), "lightPosition");
+	int lightAmbient_location = glGetUniformLocation(shader.ID(), "lightAmbient");
+	int lightDiffuse_location = glGetUniformLocation(shader.ID(), "lightDiffuse");
+	int lightSpecular_location = glGetUniformLocation(shader.ID(), "lightSpecular");
+	int lightGlobal_location = glGetUniformLocation(shader.ID(), "lightGlobal");
 	int shininess_location = glGetUniformLocation(shader.ID(), "shininess");
 	int constantAttenuation_location = glGetUniformLocation(shader.ID(), "constantAttenuation");
 	int linearAttenuation_location = glGetUniformLocation(shader.ID(), "linearAttenuation");
@@ -47,6 +57,11 @@ void display_handler() {
     glUniform3fv(materialAmbient_location, 1, materialAmbient);
     glUniform3fv(materialDiffuse_location, 1, materialDiffuse);
     glUniform3fv(materialSpecular_location, 1, materialSpecular);
+    glUniform3fv(lightPosition_location, 1, lightPosition);
+    glUniform3fv(lightAmbient_location, 1, lightAmbient);
+    glUniform3fv(lightDiffuse_location, 1, lightDiffuse);
+    glUniform3fv(lightSpecular_location, 1, lightSpecular);
+    glUniform3fv(lightGlobal_location, 1, lightGlobal);
     glUniform1f(shininess_location, shininess);
     glUniform1f(constantAttenuation_location, constantAttenuation);
     glUniform1f(linearAttenuation_location, linearAttenuation);

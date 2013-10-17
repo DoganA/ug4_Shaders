@@ -13,11 +13,14 @@ Run the program via
 - provide the path to a *bmp* file in the optional *texture* argument in order
   to render the scene with a texture mapped onto the object
 
-Alternatively, just run the program with the `make` commands described in the
+Alternatively, just run the program with the *make* commands described in the
 following sections. **This is the recommended way to run the program.**
 
 Properties such as light position, the scene attenuation constants or the
-rendered object's color can be changed by modifying `src/scene_constants.h`.
+rendered object's color can be changed by modifying *src/scene_constants.h*.
+
+Note that only a single light-source is currently supported, however, supporting
+multiple lights is a trivial extension.
 
 ### Flat shading
 The vertex shader computes and interpolates all intensities: attenuation,

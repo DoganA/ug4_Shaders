@@ -1,4 +1,4 @@
-// Does the phong illumination calculation once per pixel
+// Maps a spherical texture onto the object by considering the reflection vector
 #version 120
 
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;

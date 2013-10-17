@@ -24,7 +24,7 @@ float lightGlobal[3]        = {0.33, 0.33, 0.33};
 unsigned int vertex_position_buffer_object;
 unsigned int vertex_normal_buffer_object;
 unsigned int vertex_uv_buffer_object;
-unsigned int textureID;
+GLuint textureID;
 
 void cleanup() {
 }
@@ -151,7 +151,7 @@ void keyboard_handler(unsigned char key, int x, int y) {
     display_handler();
 }
 
-void setup_texture(char *texture_path) {
+void setup_texture(char *texture_path, GLuint *textureID) {
     if (texture_path == NULL) return;
     unsigned char header[54];
     unsigned int data_pos, width, height, texture_size;
@@ -180,8 +180,8 @@ void setup_texture(char *texture_path) {
     fread(data, 1, texture_size, file);
     fclose(file);
     // convert to OpenGL texture
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    glGenTextures(1, textureID);
+    glBindTexture(GL_TEXTURE_2D, *textureID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -311,7 +311,7 @@ int main(int argc, char **argv) {
 	// create shader, prepare data for OpenGL
     trig.LoadFile(model_path);
 	shader.Init(vertexshader_path, fragmentshader_path);
-    setup_texture(texture_path);
+    setup_texture(texture_path, &textureID);
 	setup_vertex_position_buffer_object();
 	setup_vertex_uv_buffer_object();
     setup_vertex_normal_buffer_object(use_smoothed_normals);

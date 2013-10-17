@@ -10,8 +10,8 @@ Compile and run with `make flat`
 ![flat shading screenshot](doc/flat.png)
 
 ###  Gouraud shading
-The vertex and fragment shaders are the same as for flat shading.  Vertex
-normals are computed by averaging over the normals of adjacent faces.
+Same as Flat shading but the vertex normals are computed by averaging over the
+normals of adjacent faces.
 
 Compile and run with `make gouraud`
 
@@ -43,8 +43,8 @@ Compile and run with `make depth`
 ![depth shading screenshot](doc/depth.png)
 
 ###  Texturing
-Same as Flat/Gouraud/Phong shading only that the fragment shader interpolates
-pixel colors with colors from an image.
+Same as Flat/Gouraud/Phong shading but the fragment shader interpolates pixel
+colors with colors from an image.
 
 Compile and run with `make texture-{flat,gouraud,phong}`
 

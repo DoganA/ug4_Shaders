@@ -7,7 +7,7 @@
 void TriangleMesh::LoadFile(char * filename) {
 	FILE *file = fopen(filename, "r");
 	if(file  == NULL){
-        std::cout << "Can't open file " << filename << std::endl;
+        std::cerr << "Can't open file " << filename << std::endl;
 		return;
 	}
     std::vector<unsigned int> vertexIndices, uvIndices;
@@ -46,7 +46,7 @@ void TriangleMesh::LoadFile(char * filename) {
 			unsigned int vertexIndex[3], uvIndex[3];
 			int matches = fscanf(file, "%d/%d %d/%d %d/%d\n",&vertexIndex[0], &uvIndex[0], &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2] );
 			if(matches != 6){
-                std::cout << "Can't be read by simple parser!" << std::endl;
+                std::cerr << "Can't be read by simple parser!" << std::endl;
 				return;
 			}
 			Triangle trig(vertexIndex[0],vertexIndex[1],vertexIndex[2]);
@@ -83,5 +83,4 @@ void TriangleMesh::LoadFile(char * filename) {
 	{
 		_vertices[i] = (_vertices[i]-averageVertex)/range*400.0f;
 	}
-    std::cout << "Number of triangles: " << _triangles.size() << ", number of vertices: " << _vertices.size() << std::endl;
 };

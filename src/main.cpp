@@ -254,7 +254,6 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
 
 int main(int argc, char **argv) {
 	atexit(cleanup);
-    std::cout << "Computer Graphics Assignment 1" << std::endl;
     // parse arguments
     char *model_path = NULL;
     char *vertexshader_path = NULL;
@@ -293,11 +292,11 @@ int main(int argc, char **argv) {
 	// initialise the OpenGL Extension Wrangler library for VBOs
 	GLenum err = glewInit();
 	if (err != GLEW_OK){
-        std::cout << "Error!" << std::endl;
+        std::cerr << "Error!" << std::endl;
 		exit(1);
 	}
 	if (!GLEW_VERSION_2_1) {
-        std::cout << "Error 2.1!" << std::endl;
+        std::cerr << "Error 2.1!" << std::endl;
 		exit(1);
 	}
 	// create shader, prepare data for OpenGL

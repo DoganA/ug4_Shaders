@@ -30,3 +30,8 @@ std::ostream & operator << (std::ostream & stream, const glm::vec3 & obj) {
 	stream << obj.x << ' ' << obj.y << ' ' << obj.z << ' ';
 	return stream;
 }
+
+std::ostream & operator << (std::ostream & stream, const glm::vec2 & obj) {
+	stream << obj.x << ' ' << obj.y << ' ';
+	return stream;
+}

@@ -18,6 +18,8 @@ Run the program via
 Alternatively, just run the program with the *make* commands described in the
 following sections. **This is the recommended way to run the program.**
 
+Exit the program by closing the application window or pressing *escape*.
+
 Properties such as light position, the scene attenuation constants or the
 rendered object's color can be changed by modifying *src/scene_constants.h*.
 
@@ -98,4 +100,4 @@ Use `q w e r t y` to translate in +/- direction around the three axes
 
 Use `a s d f g h` to rotate in +/- direction around the three axes
 
-Use space to restore the default perspective. Escape exits the application.
+Press *space* to restore the default perspective.

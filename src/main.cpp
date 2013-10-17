@@ -100,13 +100,13 @@ glm::mat4 get_default_projectionMatrix(void) {
                       -1.0f, 400.0f);
 }
 glm::mat4 get_default_viewMatrix(void) {
-    return glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-300.0f));
+    return glm::translate(glm::mat4(1.0f), glm::vec3(-50.0f, -50.0f, -300.0f));
 }
 glm::mat3 get_default_normalMatrix(void) {
     return glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
 }
 glm::mat4 get_default_modelMatrix(void) {
-    return glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
+    return glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
 }
 
 void keyboard_handler(unsigned char key, int x, int y) {

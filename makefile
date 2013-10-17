@@ -78,7 +78,7 @@ environment: compile
 		$(SHADERS)/environmentmapShader.vert \
 		$(SHADERS)/environmentmapShader.frag \
 		1 \
-		$(RES)/cube_map.bmp
+		$(RES)/sphere_map.bmp
 
 clean:
 	rm -f $(BIN)/*

@@ -9,21 +9,21 @@ Shader shader;
 
 glm::mat4 projectionMatrix, viewMatrix, modelMatrix;
 glm::mat3 normalMatrix;
-float materialAmbient[3]    = {1.00, 0.50, 0.00};
-float materialDiffuse[3]    = {0.55, 0.55, 0.55};
-float materialSpecular[3]   = {0.99, 0.99, 0.99};
-float shininess             = 10;
-float constantAttenuation   = 0.1;
-float linearAttenuation     = 0.9;
-float lightPosition[3]      = {0.00, 0.00, 2.00};
-float lightAmbient[3]       = {0.01, 0.01, 0.01};
-float lightDiffuse[3]       = {0.33, 0.33, 0.33};
-float lightSpecular[3]      = {0.50, 0.50, 0.50};
-float lightGlobal[3]        = {0.33, 0.33, 0.33};
+GLfloat materialAmbient[3]    = {1.00, 0.50, 0.00};
+GLfloat materialDiffuse[3]    = {0.55, 0.55, 0.55};
+GLfloat materialSpecular[3]   = {0.99, 0.99, 0.99};
+GLfloat shininess             = 10;
+GLfloat constantAttenuation   = 0.1;
+GLfloat linearAttenuation     = 0.9;
+GLfloat lightPosition[3]      = {0.00, 0.00, 2.00};
+GLfloat lightAmbient[3]       = {0.01, 0.01, 0.01};
+GLfloat lightDiffuse[3]       = {0.33, 0.33, 0.33};
+GLfloat lightSpecular[3]      = {0.50, 0.50, 0.50};
+GLfloat lightGlobal[3]        = {0.33, 0.33, 0.33};
 
-unsigned int vertex_position_buffer_object;
-unsigned int vertex_normal_buffer_object;
-unsigned int vertex_uv_buffer_object;
+GLuint vertex_position_buffer_object;
+GLuint vertex_normal_buffer_object;
+GLuint vertex_uv_buffer_object;
 GLuint textureID;
 
 void cleanup() {
@@ -35,21 +35,21 @@ void display_handler() {
 	shader.Bind();
 
 	// Find the location of our uniform variables in the current shader program
-	int projectionMatrix_location = glGetUniformLocation(shader.ID(), "projectionMatrix");
-	int viewMatrix_location = glGetUniformLocation(shader.ID(), "viewMatrix");
-	int modelMatrix_location = glGetUniformLocation(shader.ID(), "modelMatrix");
-	int normalMatrix_location = glGetUniformLocation(shader.ID(), "normalMatrix");
-	int materialAmbient_location = glGetUniformLocation(shader.ID(), "materialAmbient");
-	int materialDiffuse_location = glGetUniformLocation(shader.ID(), "materialDiffuse");
-	int materialSpecular_location = glGetUniformLocation(shader.ID(), "materialSpecular");
-	int lightPosition_location = glGetUniformLocation(shader.ID(), "lightPosition");
-	int lightAmbient_location = glGetUniformLocation(shader.ID(), "lightAmbient");
-	int lightDiffuse_location = glGetUniformLocation(shader.ID(), "lightDiffuse");
-	int lightSpecular_location = glGetUniformLocation(shader.ID(), "lightSpecular");
-	int lightGlobal_location = glGetUniformLocation(shader.ID(), "lightGlobal");
-	int shininess_location = glGetUniformLocation(shader.ID(), "shininess");
-	int constantAttenuation_location = glGetUniformLocation(shader.ID(), "constantAttenuation");
-	int linearAttenuation_location = glGetUniformLocation(shader.ID(), "linearAttenuation");
+	GLint projectionMatrix_location = glGetUniformLocation(shader.ID(), "projectionMatrix");
+	GLint viewMatrix_location = glGetUniformLocation(shader.ID(), "viewMatrix");
+	GLint modelMatrix_location = glGetUniformLocation(shader.ID(), "modelMatrix");
+	GLint normalMatrix_location = glGetUniformLocation(shader.ID(), "normalMatrix");
+	GLint materialAmbient_location = glGetUniformLocation(shader.ID(), "materialAmbient");
+	GLint materialDiffuse_location = glGetUniformLocation(shader.ID(), "materialDiffuse");
+	GLint materialSpecular_location = glGetUniformLocation(shader.ID(), "materialSpecular");
+	GLint lightPosition_location = glGetUniformLocation(shader.ID(), "lightPosition");
+	GLint lightAmbient_location = glGetUniformLocation(shader.ID(), "lightAmbient");
+	GLint lightDiffuse_location = glGetUniformLocation(shader.ID(), "lightDiffuse");
+	GLint lightSpecular_location = glGetUniformLocation(shader.ID(), "lightSpecular");
+	GLint lightGlobal_location = glGetUniformLocation(shader.ID(), "lightGlobal");
+	GLint shininess_location = glGetUniformLocation(shader.ID(), "shininess");
+	GLint constantAttenuation_location = glGetUniformLocation(shader.ID(), "constantAttenuation");
+	GLint linearAttenuation_location = glGetUniformLocation(shader.ID(), "linearAttenuation");
 	// Pass the current values for our variables to the shader program
 	glUniformMatrix4fv(projectionMatrix_location, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrix_location, 1, GL_FALSE, &viewMatrix[0][0]);
@@ -68,7 +68,7 @@ void display_handler() {
     glUniform1f(linearAttenuation_location, linearAttenuation);
 
     // Tell OpenGL we will be using texture variable in the shader
-    int texture0_location = glGetAttribLocation(shader.ID(), "texture0");
+    GLint texture0_location = glGetAttribLocation(shader.ID(), "texture0");
     if (texture0_location != -1) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureID);
@@ -76,7 +76,7 @@ void display_handler() {
     }
 
     // Tell OpenGL we will be using vertex position variable in the shader
-	int position_location = glGetAttribLocation(shader.ID(), "vertex_position");
+	GLint position_location = glGetAttribLocation(shader.ID(), "vertex_position");
 	if (position_location != -1) {
         glEnableVertexAttribArray(position_location);
         glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
@@ -84,7 +84,7 @@ void display_handler() {
     }
 
 	// Tell OpenGL we will be using vertex uv variable in the shader
-	int uv_location = glGetAttribLocation(shader.ID(), "vertex_uv");
+	GLint uv_location = glGetAttribLocation(shader.ID(), "vertex_uv");
 	if (uv_location != -1) {
         glEnableVertexAttribArray(uv_location);
         glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer_object);
@@ -92,7 +92,7 @@ void display_handler() {
     }
 
 	// Tell OpenGL we will be using vertex normal variable in the shader
-	int normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
+	GLint normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
 	if (normal_location != -1) {
         glEnableVertexAttribArray(normal_location);
         glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);

@@ -261,7 +261,12 @@ int main(int argc, char **argv) {
         use_smoothed_normals = *argv[4] != '0';
 	} else {
         cerr << "Usage:" << endl;
-		cerr << argv[0] << " <model> <vertex-shader> <fragment-shader> <smooth-normals>" << endl;
+		cerr << argv[0]
+             << " <model::path> "
+             << " <vertex-shader::path> "
+             << " <fragment-shader::path> "
+             << " <smooth-normals::{0,1}>"
+             << endl;
 		exit(1);
 	}
 	// initialise OpenGL

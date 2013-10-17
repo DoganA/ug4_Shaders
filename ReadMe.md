@@ -3,6 +3,7 @@
 ### How to use
 
 Compile the program with `make compile`.
+
 Run the program via
 `bin/main <model> <vertex-shader> <fragment-shader> <normal-mode> (texture)`
 - *model* is the path to the *obj* file to render
@@ -14,6 +15,9 @@ Run the program via
 
 Alternatively, just run the program with the `make` commands described in the
 following sections. **This is the recommended way to run the program.**
+
+Properties such as light position, the scene attenuation constants or the
+rendered object's color can be changed by modifying `src/scene_constants.h`.
 
 ### Flat shading
 The vertex shader computes and interpolates all intensities: attenuation,

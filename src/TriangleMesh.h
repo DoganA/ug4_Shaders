@@ -36,6 +36,7 @@ class TriangleMesh {
         int TriangleCount() { return _triangles.size() ;};
         int VertexCount() { return _vertices.size();};
         vector<glm::vec3> &Vertices() { return _vertices; }
+        vector<glm::vec2> &UVs() { return _uvs; }
 };
 
 #endif

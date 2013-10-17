@@ -18,6 +18,7 @@ float linearAttenuation     = 0.9;
 
 unsigned int vertex_position_buffer_object;
 unsigned int vertex_normal_buffer_object;
+unsigned int vertex_uv_buffer_object;
 
 void cleanup() {
 }
@@ -58,6 +59,21 @@ void display_handler() {
         glVertexAttribPointer(
             position_location,
             3,                 // number of elements per vertex, here (x,y,z)
+            GL_FLOAT,          // the type of each element
+            GL_FALSE,          // take our values as-is
+            0,                 // no extra data between each position
+            0                  // offset of first element
+        );
+    }
+
+	// Tell OpenGL we will be using vertex uv variable in the shader
+	int uv_location = glGetAttribLocation(shader.ID(), "vertex_uv");
+	if (uv_location != -1) {
+        glEnableVertexAttribArray(uv_location);
+        glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer_object);
+        glVertexAttribPointer(
+            uv_location,
+            2,                 // number of elements per vertex, here (u,v)
             GL_FLOAT,          // the type of each element
             GL_FALSE,          // take our values as-is
             0,                 // no extra data between each position
@@ -130,7 +146,6 @@ void keyboard_handler(unsigned char key, int x, int y) {
     display_handler();
 }
 
-// create a new Vertex Buffer Object, bind it and stream data to it
 void setup_vertex_position_buffer_object() {
 	glGenBuffers(1, &vertex_position_buffer_object);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
@@ -140,6 +155,17 @@ void setup_vertex_position_buffer_object() {
 		&trig.Vertices()[0],                    // pointer to the array of data
 		GL_STATIC_DRAW);
 	cout << "vertex_position_buffer_object generated!" << endl;
+}
+
+void setup_vertex_uv_buffer_object() {
+	glGenBuffers(1, &vertex_uv_buffer_object);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer_object);
+	glBufferData(
+        GL_ARRAY_BUFFER,                       // the target buffer object
+		sizeof(glm::vec2) * trig.UVs().size(), // size in bytes for the data
+		&trig.UVs()[0],                        // pointer to the array of data
+		GL_STATIC_DRAW);
+	cout << "vertex_uv_buffer_object generated!" << endl;
 }
 
 void setup_vertex_normal_buffer_object(bool smoothed) {
@@ -244,6 +270,7 @@ int main(int argc, char **argv) {
     trig.LoadFile(model_path);
 	shader.Init(vertexshader_path, fragmentshader_path);
 	setup_vertex_position_buffer_object();
+	setup_vertex_uv_buffer_object();
     setup_vertex_normal_buffer_object(use_smoothed_normals);
 	// set up camera and object transformation matrices
 	projectionMatrix = _get_projectionMatrix();

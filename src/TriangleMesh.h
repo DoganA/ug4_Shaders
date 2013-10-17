@@ -10,8 +10,6 @@
 
 #include "utils.h"
 
-using namespace std;
-
 class Triangle;
 class TriangleMesh;
 
@@ -24,9 +22,9 @@ class Triangle {
 };
 
 class TriangleMesh {
-	vector <glm::vec3> _vertices;
-	vector <glm::vec2> _uvs;
-	vector <Triangle> _triangles;
+    std::vector <glm::vec3> _vertices;
+	std::vector <glm::vec2> _uvs;
+	std::vector <Triangle> _triangles;
 	glm::vec3 _min, _max;
 
     public:
@@ -35,8 +33,8 @@ class TriangleMesh {
         void LoadFile(char * filename);
         int TriangleCount() { return _triangles.size() ;};
         int VertexCount() { return _vertices.size();};
-        vector<glm::vec3> &Vertices() { return _vertices; }
-        vector<glm::vec2> &UVs() { return _uvs; }
+        std::vector<glm::vec3> &Vertices() { return _vertices; }
+        std::vector<glm::vec2> &UVs() { return _uvs; }
 };
 
 #endif

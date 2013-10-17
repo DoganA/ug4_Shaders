@@ -1,5 +1,4 @@
 #include "main.h"
-using namespace std;
 
 TriangleMesh trig;
 Shader shader;
@@ -7,9 +6,7 @@ Shader shader;
 glm::mat4 projectionMatrix, viewMatrix, modelMatrix;
 glm::mat3 normalMatrix;
 
-GLuint vertex_position_buffer;
-GLuint vertex_normal_buffer;
-GLuint vertex_uv_buffer;
+GLuint vertex_position_buffer, vertex_normal_buffer, vertex_uv_buffer;
 GLuint textureID;
 
 void cleanup(void) {
@@ -147,12 +144,12 @@ void setup_texture(char *texture_path, GLuint *textureID) {
     // open file
     FILE *file = fopen(texture_path, "rb");
     if (!file) {
-        cerr << "couldn't open image" << endl;
+        std::cerr << "couldn't open image" << std::endl;
         return;
     }
     // validate header
     if ((fread(header, 1, 54, file) != 54) || (header[0] != 'B' || header[1] != 'M')) {
-        cerr << "not a valid bmp file" << endl;
+        std::cerr << "not a valid bmp file" << std::endl;
         return;
     }
     // read integers
@@ -191,16 +188,16 @@ void setup_vertex_uv_buffer_object(void) {
 		         &trig.UVs()[0], GL_STATIC_DRAW);
 }
 void setup_vertex_normal_buffer_object(bool smoothed) {
-    vector<glm::vec3> vertices = trig.Vertices();
-    vector<glm::vec3> normals;
+    std::vector<glm::vec3> vertices = trig.Vertices();
+    std::vector<glm::vec3> normals;
     if (smoothed) {
         // initialize map of normals to zero
         // note that we store readily hashable vector<double> types instead of
         // vec3s and convert between the two as required
         // ...avoids some of the pain using <map> without much C++ knowledge
-        map< vector<double>, vector<double> > normal_map;
+        std::map< std::vector<double>, std::vector<double> > normal_map;
         for (int i = 0; i < vertices.size(); i++) {
-            vector<double> zeros;
+            std::vector<double> zeros;
             zeros.push_back(0.0);
             zeros.push_back(0.0);
             zeros.push_back(0.0);
@@ -211,9 +208,9 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
             glm::vec3 v1 = vertices[i];
             glm::vec3 v2 = vertices[i + 1];
             glm::vec3 v3 = vertices[i + 2];
-            vector<double> v1_key = to_vector(v1);
-            vector<double> v2_key = to_vector(v2);
-            vector<double> v3_key = to_vector(v3);
+            std::vector<double> v1_key = to_vector(v1);
+            std::vector<double> v2_key = to_vector(v2);
+            std::vector<double> v3_key = to_vector(v3);
             // compute face normal
             glm::vec3 face_normal = glm::cross(v3 - v2, v1 - v2);
             // get the old vertex normal
@@ -253,7 +250,7 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
 
 int main(int argc, char **argv) {
 	atexit(cleanup);
-    cout << "Computer Graphics Assignment 1" << endl;
+    std::cout << "Computer Graphics Assignment 1" << std::endl;
     // parse arguments
     char *model_path = NULL;
     char *vertexshader_path = NULL;
@@ -269,14 +266,14 @@ int main(int argc, char **argv) {
         fragmentshader_path = argv[3];
         use_smoothed_normals = *argv[4] != '0';
 	} else {
-        cerr << "Usage:" << endl;
-		cerr << argv[0]
+        std::cerr << "Usage:" << std::endl;
+        std::cerr << argv[0]
              << " <model::path> "
              << " <vertex-shader::path> "
              << " <fragment-shader::path> "
              << " <smooth-normals::{0,1}>"
              << " (<texture::path>)"
-             << endl;
+             << std::endl;
 		exit(1);
 	}
 	// initialise OpenGL
@@ -291,11 +288,11 @@ int main(int argc, char **argv) {
 	// initialise the OpenGL Extension Wrangler library for VBOs
 	GLenum err = glewInit();
 	if (err != GLEW_OK){
-		cout << "Error!" << endl;
+        std::cout << "Error!" << std::endl;
 		exit(1);
 	}
 	if (!GLEW_VERSION_2_1) {
-		cout << "Error 2.1!" << endl;
+        std::cout << "Error 2.1!" << std::endl;
 		exit(1);
 	}
 	// create shader, prepare data for OpenGL

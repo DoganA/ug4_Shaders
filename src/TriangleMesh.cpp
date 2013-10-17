@@ -1,5 +1,4 @@
 #include "TriangleMesh.h"
-using namespace std;
 
 // This function loads an obj format file This is a utility and should not have
 // to be modified for teapot.obj (the assignment).  Note that this function does
@@ -8,12 +7,12 @@ using namespace std;
 void TriangleMesh::LoadFile(char * filename) {
 	FILE *file = fopen(filename, "r");
 	if(file  == NULL){
-		cout << "Can't open file " << filename << endl;
+        std::cout << "Can't open file " << filename << std::endl;
 		return;
 	}
-	vector<unsigned int> vertexIndices, uvIndices;
-	vector<glm::vec3> tempVertices;
-	vector<glm::vec2> tempUVs;
+    std::vector<unsigned int> vertexIndices, uvIndices;
+	std::vector<glm::vec3> tempVertices;
+	std::vector<glm::vec2> tempUVs;
 	_max.x =-10000; _max.y =-10000; _max.z =-10000;
 	_min.x =10000; _min.y =10000; _min.z =10000;
 	glm::vec3 averageVertex(0.0f);
@@ -43,11 +42,11 @@ void TriangleMesh::LoadFile(char * filename) {
 			tempUVs.push_back(uv);
 		}
 		else if(strcmp(lineHeader, "f" ) == 0){
-			string vertex1, vertex2, vertex3;
+            std::string vertex1, vertex2, vertex3;
 			unsigned int vertexIndex[3], uvIndex[3];
 			int matches = fscanf(file, "%d/%d %d/%d %d/%d\n",&vertexIndex[0], &uvIndex[0], &vertexIndex[1], &uvIndex[1], &vertexIndex[2], &uvIndex[2] );
 			if(matches != 6){
-				cout << "Can't be read by simple parser!" << endl;
+                std::cout << "Can't be read by simple parser!" << std::endl;
 				return;
 			}
 			Triangle trig(vertexIndex[0],vertexIndex[1],vertexIndex[2]);
@@ -84,5 +83,5 @@ void TriangleMesh::LoadFile(char * filename) {
 	{
 		_vertices[i] = (_vertices[i]-averageVertex)/range*400.0f;
 	}
-	cout << "Number of triangles: " << _triangles.size() << ", number of vertices: " << _vertices.size() << endl;
+    std::cout << "Number of triangles: " << _triangles.size() << ", number of vertices: " << _vertices.size() << std::endl;
 };

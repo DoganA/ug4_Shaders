@@ -20,11 +20,12 @@ void cleanup(void) {
 }
 
 void display_handler(void) {
+    // clear scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1,1,1);
 	shader.Bind();
 
-	// Find the location of our uniform variables in the current shader program
+	// pass uniform variables to shader
 	GLint projectionMatrix_location = glGetUniformLocation(shader.ID(), "projectionMatrix");
 	GLint viewMatrix_location = glGetUniformLocation(shader.ID(), "viewMatrix");
 	GLint modelMatrix_location = glGetUniformLocation(shader.ID(), "modelMatrix");
@@ -40,7 +41,6 @@ void display_handler(void) {
 	GLint materialShininess_location = glGetUniformLocation(shader.ID(), "materialShininess");
 	GLint constantAttenuation_location = glGetUniformLocation(shader.ID(), "constantAttenuation");
 	GLint linearAttenuation_location = glGetUniformLocation(shader.ID(), "linearAttenuation");
-	// Pass the current values for our variables to the shader program
 	glUniformMatrix4fv(projectionMatrix_location, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrix_location, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(modelMatrix_location, 1, GL_FALSE, &modelMatrix[0][0]);
@@ -57,31 +57,28 @@ void display_handler(void) {
     glUniform1f(constantAttenuation_location, constantAttenuation);
     glUniform1f(linearAttenuation_location, linearAttenuation);
 
-    // Tell OpenGL we will be using texture variable in the shader
+    // bind texture to shader
     GLint texture0_location = glGetAttribLocation(shader.ID(), "texture0");
     if (texture0_location != -1) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureID);
         glUniform1i(texture0_location, 0);
     }
-
-    // Tell OpenGL we will be using vertex position variable in the shader
-	GLint position_location = glGetAttribLocation(shader.ID(), "vertex_position");
-	if (position_location != -1) {
-        glEnableVertexAttribArray(position_location);
-        glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer);
-        glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    }
-
-	// Tell OpenGL we will be using vertex uv variable in the shader
+    // bind vertex uv coordinates to shader
 	GLint uv_location = glGetAttribLocation(shader.ID(), "vertex_uv");
 	if (uv_location != -1) {
         glEnableVertexAttribArray(uv_location);
         glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer);
         glVertexAttribPointer(uv_location, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
-
-	// Tell OpenGL we will be using vertex normal variable in the shader
+    // bind vertex positions to shader
+	GLint position_location = glGetAttribLocation(shader.ID(), "vertex_position");
+	if (position_location != -1) {
+        glEnableVertexAttribArray(position_location);
+        glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer);
+        glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    }
+    // bind vertex normals to shader
 	GLint normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
 	if (normal_location != -1) {
         glEnableVertexAttribArray(normal_location);
@@ -89,6 +86,7 @@ void display_handler(void) {
         glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
+    // draw the scene
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
 	glDisableVertexAttribArray(position_location);
 	glDisableVertexAttribArray(uv_location);
@@ -117,6 +115,7 @@ glm::mat4 get_default_modelMatrix(void) {
 void keyboard_handler(unsigned char key, int x, int y) {
     glm::vec3 translation = glm::vec3(0, 0, 0);
     glm::vec3 rotation = glm::vec3(0, 0, 0);
+    // check which translation or rotation was requested
     switch (key) {
         case 'q': translation = glm::vec3( 1, 0, 0); break;
         case 'w': translation = glm::vec3(-1, 0, 0); break;
@@ -132,12 +131,14 @@ void keyboard_handler(unsigned char key, int x, int y) {
         case 'h': rotation = glm::vec3( 0, 0,-1); break;
         case ' ': viewMatrix = get_default_viewMatrix(); break;
     }
+    // perform the translation or rotation
     if (translation.x != 0 || translation.y != 0 || translation.z != 0) {
         viewMatrix = glm::translate(viewMatrix, translation);
     } else if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0) {
         viewMatrix = glm::rotate(viewMatrix, 1.0f, rotation);
     }
     normalMatrix = get_default_normalMatrix();
+    // re-draw the scene
     display_handler();
 }
 
@@ -154,7 +155,7 @@ void setup_texture(char *texture_path, GLuint *textureID) {
     }
     // validate header
     if ((fread(header, 1, 54, file) != 54) || (header[0] != 'B' || header[1] != 'M')) {
-        std::cerr << "not a valid bmp file" << std::endl;
+        cerr << "not a valid bmp file" << endl;
         return;
     }
     // read integers
@@ -186,19 +187,20 @@ void setup_vertex_position_buffer_object(void) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * trig.VertexCount(),
 		         &trig.Vertices()[0], GL_STATIC_DRAW);
 }
-
 void setup_vertex_uv_buffer_object(void) {
 	glGenBuffers(1, &vertex_uv_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * trig.UVs().size(),
 		         &trig.UVs()[0], GL_STATIC_DRAW);
 }
-
 void setup_vertex_normal_buffer_object(bool smoothed) {
     vector<glm::vec3> vertices = trig.Vertices();
     vector<glm::vec3> normals;
     if (smoothed) {
         // initialize map of normals to zero
+        // note that we store readily hashable vector<double> types instead of
+        // vec3s and convert between the two as required
+        // ...avoids some of the pain using <map> without much C++ knowledge
         map< vector<double>, vector<double> > normal_map;
         for (int i = 0; i < vertices.size(); i++) {
             vector<double> zeros;
@@ -208,7 +210,7 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
             normal_map[to_vector(vertices[i])] = zeros;
         }
         for (int i = 0; i < vertices.size(); i += 3) {
-            // get vertices of this triangle
+            // get vertices of the current triangle
             glm::vec3 v1 = vertices[i];
             glm::vec3 v2 = vertices[i + 1];
             glm::vec3 v3 = vertices[i + 2];
@@ -255,6 +257,7 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
 int main(int argc, char **argv) {
 	atexit(cleanup);
     cout << "Computer Graphics Assignment 1" << endl;
+    // parse arguments
     char *model_path = NULL;
     char *vertexshader_path = NULL;
     char *fragmentshader_path = NULL;
@@ -285,7 +288,7 @@ int main(int argc, char **argv) {
 	glutCreateWindow("CG-CW1");
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
     glEnable(GL_DEPTH_TEST);
-    // set display/keyboard callbacks
+    // set display and keyboard callbacks
 	glutDisplayFunc(display_handler);
     glutKeyboardFunc(keyboard_handler);
 	// initialise the OpenGL Extension Wrangler library for VBOs

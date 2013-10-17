@@ -1,9 +1,6 @@
 #include "main.h"
 using namespace std;
 
-float windowX = 640.0f;
-float windowY = 480.0f;
-
 TriangleMesh trig;
 Shader shader;
 

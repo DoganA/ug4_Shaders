@@ -1,3 +1,7 @@
+// properties of the application window
+const float windowX = 640.0f;
+const float windowY = 480.0f;
+
 // properties of the model
 const float materialAmbient[3]  = {1.00, 0.50, 0.00};
 const float materialDiffuse[3]  = {0.55, 0.55, 0.55};

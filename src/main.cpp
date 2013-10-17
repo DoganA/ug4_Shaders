@@ -98,6 +98,8 @@ void display_handler() {
 
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
 	glDisableVertexAttribArray(position_location);
+	glDisableVertexAttribArray(uv_location);
+	glDisableVertexAttribArray(normal_location);
 	shader.Unbind();
 	glFlush();
 }

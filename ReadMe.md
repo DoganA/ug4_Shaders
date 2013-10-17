@@ -12,7 +12,8 @@ Run the program via
 - set *normal-mode* to 1 in order to use vertex normals that are averaged over
   face normals or to 0 in order to skip the averaging step
 - provide the path to a *bmp* file in the optional *texture* argument in order
-  to render the scene with a texture mapped onto the object
+  to render the scene with a texture, spherical environment-map or bump-map
+  applied to the object
 
 Alternatively, just run the program with the *make* commands described in the
 following sections. **This is the recommended way to run the program.**

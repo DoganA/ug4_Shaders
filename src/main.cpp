@@ -71,14 +71,7 @@ void display_handler() {
 	if (position_location != -1) {
         glEnableVertexAttribArray(position_location);
         glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
-        glVertexAttribPointer(
-            position_location,
-            3,                 // number of elements per vertex, here (x,y,z)
-            GL_FLOAT,          // the type of each element
-            GL_FALSE,          // take our values as-is
-            0,                 // no extra data between each position
-            0                  // offset of first element
-        );
+        glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
 	// Tell OpenGL we will be using vertex uv variable in the shader
@@ -86,14 +79,7 @@ void display_handler() {
 	if (uv_location != -1) {
         glEnableVertexAttribArray(uv_location);
         glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer_object);
-        glVertexAttribPointer(
-            uv_location,
-            2,                 // number of elements per vertex, here (u,v)
-            GL_FLOAT,          // the type of each element
-            GL_FALSE,          // take our values as-is
-            0,                 // no extra data between each position
-            0                  // offset of first element
-        );
+        glVertexAttribPointer(uv_location, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
 	// Tell OpenGL we will be using vertex normal variable in the shader
@@ -101,14 +87,7 @@ void display_handler() {
 	if (normal_location != -1) {
         glEnableVertexAttribArray(normal_location);
         glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);
-        glVertexAttribPointer(
-            normal_location,
-            3,                 // number of elements per vertex, here (x,y,z)
-            GL_FLOAT,          // the type of each element
-            GL_FALSE,          // take our values as-is
-            0,                 // no extra data between each position
-            0                  // offset of first element
-        );
+        glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
 	glDrawArrays(GL_TRIANGLES, 0, trig.VertexCount());
@@ -166,21 +145,15 @@ void keyboard_handler(unsigned char key, int x, int y) {
 void setup_vertex_position_buffer_object() {
 	glGenBuffers(1, &vertex_position_buffer_object);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
-	glBufferData(
-        GL_ARRAY_BUFFER,                        // the target buffer object
-		sizeof(glm::vec3) * trig.VertexCount(), // size in bytes for the data
-		&trig.Vertices()[0],                    // pointer to the array of data
-		GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * trig.VertexCount(),
+		         &trig.Vertices()[0], GL_STATIC_DRAW);
 }
 
 void setup_vertex_uv_buffer_object() {
 	glGenBuffers(1, &vertex_uv_buffer_object);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer_object);
-	glBufferData(
-        GL_ARRAY_BUFFER,                       // the target buffer object
-		sizeof(glm::vec2) * trig.UVs().size(), // size in bytes for the data
-		&trig.UVs()[0],                        // pointer to the array of data
-		GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * trig.UVs().size(),
+		         &trig.UVs()[0], GL_STATIC_DRAW);
 }
 
 void setup_vertex_normal_buffer_object(bool smoothed) {
@@ -237,11 +210,8 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
     }
     glGenBuffers(1, &vertex_normal_buffer_object);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        sizeof(glm::vec3) * normals.size(),
-        &normals[0],
-        GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * normals.size(),
+                 &normals[0], GL_STATIC_DRAW);
 }
 
 int main(int argc, char **argv) {

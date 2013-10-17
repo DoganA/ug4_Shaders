@@ -1,4 +1,4 @@
-// Vertex Shader - acts at a per-vertex level
+// Compute colors as normal and discretize to fixed pallette before rendering
 #version 120
 
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
@@ -15,10 +15,12 @@ varying vec2 uv;
 void main(void) {
     vec4 vertex = vec4(vertex_position, 1.0);
 
+    // pass variables
     normal = normalize(normalMatrix * vertex_normal);
     position = vec3(viewMatrix * modelMatrix * vertex);
-
     uv = vertex_uv;
     vertex_color = materialAmbient + materialDiffuse;
+
+    // set vertex position in OpenGL
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertex;
 }

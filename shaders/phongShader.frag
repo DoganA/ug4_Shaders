@@ -1,4 +1,4 @@
-// Fragment Shader - acts at a per-pixel level
+// Does the phong illumination calculation once per pixel
 #version 120
 
 uniform vec3 materialSpecular, lightSpecular, lightPosition;
@@ -10,6 +10,7 @@ varying vec3 diffuse, ambientGlobal, ambient, position, normal;
 varying vec2 uv;
 
 void main(void) {
+    // do lighting computation
     vec3 N = normalize(normal);
     vec3 L = normalize(lightPosition - position);
     vec3 R = 2 * dot(L, N) * N - L;
@@ -28,6 +29,9 @@ void main(void) {
                  * pow(cosAlpha, materialShininess);
     }
 
+    // mix in texture color if required
     if (useTexture != 0) color *= texture2D(texture0, uv.st).rgb;
+
+    // set pixel color in OpenGL
     gl_FragColor = vec4(color, 1.0);
 }

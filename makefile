@@ -66,5 +66,12 @@ texture-phong: compile
 		1 \
 		$(RES)/wood.bmp
 
+environment: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/environmentmapShader.vert \
+		$(SHADERS)/environmentmapShader.frag \
+		1 \
+		$(RES)/cube_map.bmp
+
 clean:
 	rm -f $(BIN)/*

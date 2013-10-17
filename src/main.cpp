@@ -171,7 +171,6 @@ void setup_vertex_position_buffer_object() {
 		sizeof(glm::vec3) * trig.VertexCount(), // size in bytes for the data
 		&trig.Vertices()[0],                    // pointer to the array of data
 		GL_STATIC_DRAW);
-	cout << "vertex_position_buffer_object generated!" << endl;
 }
 
 void setup_vertex_uv_buffer_object() {
@@ -182,7 +181,6 @@ void setup_vertex_uv_buffer_object() {
 		sizeof(glm::vec2) * trig.UVs().size(), // size in bytes for the data
 		&trig.UVs()[0],                        // pointer to the array of data
 		GL_STATIC_DRAW);
-	cout << "vertex_uv_buffer_object generated!" << endl;
 }
 
 void setup_vertex_normal_buffer_object(bool smoothed) {
@@ -244,7 +242,6 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
         sizeof(glm::vec3) * normals.size(),
         &normals[0],
         GL_STATIC_DRAW);
-    cout << "vertex_normal_buffer_object generated!" << endl;
 }
 
 int main(int argc, char **argv) {

@@ -66,6 +66,13 @@ texture-phong: compile
 		1 \
 		$(RES)/wood.bmp
 
+bump: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/bumpmapShader.vert \
+		$(SHADERS)/bumpmapShader.frag \
+		1 \
+		$(RES)/bump_map.bmp
+
 environment: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \
 		$(SHADERS)/environmentmapShader.vert \

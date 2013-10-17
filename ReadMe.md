@@ -73,6 +73,15 @@ Compile and run with `make texture-{flat,gouraud,phong}`
 
 ![texturing screen-shot](doc/texture-phong.png)
 
+###  Bump mapping
+Same as Phong shading but the normal vectors are perturbed by a bump-map and the
+tangent and binormal vectors before the lighting calculation. The tangent and
+binormal vectors are approximated in the vertex shader.
+
+Compile and run with `make bump`
+
+![bump mapping screen-shot](doc/bump.png)
+
 ###  Environment mapping
 Same as textured Phong shading but the texture is drawn from a spherical map and
 mapped onto the object by considering the reflection vector at each pixel rather

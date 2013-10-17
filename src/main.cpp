@@ -9,17 +9,6 @@ Shader shader;
 
 glm::mat4 projectionMatrix, viewMatrix, modelMatrix;
 glm::mat3 normalMatrix;
-GLfloat materialAmbient[3]    = {1.00, 0.50, 0.00};
-GLfloat materialDiffuse[3]    = {0.55, 0.55, 0.55};
-GLfloat materialSpecular[3]   = {0.99, 0.99, 0.99};
-GLfloat shininess             = 10;
-GLfloat constantAttenuation   = 0.1;
-GLfloat linearAttenuation     = 0.9;
-GLfloat lightPosition[3]      = {0.00, 0.00, 2.00};
-GLfloat lightAmbient[3]       = {0.01, 0.01, 0.01};
-GLfloat lightDiffuse[3]       = {0.33, 0.33, 0.33};
-GLfloat lightSpecular[3]      = {0.50, 0.50, 0.50};
-GLfloat lightGlobal[3]        = {0.33, 0.33, 0.33};
 
 GLuint vertex_position_buffer;
 GLuint vertex_normal_buffer;
@@ -48,7 +37,7 @@ void display_handler(void) {
 	GLint lightDiffuse_location = glGetUniformLocation(shader.ID(), "lightDiffuse");
 	GLint lightSpecular_location = glGetUniformLocation(shader.ID(), "lightSpecular");
 	GLint lightGlobal_location = glGetUniformLocation(shader.ID(), "lightGlobal");
-	GLint shininess_location = glGetUniformLocation(shader.ID(), "shininess");
+	GLint materialShininess_location = glGetUniformLocation(shader.ID(), "materialShininess");
 	GLint constantAttenuation_location = glGetUniformLocation(shader.ID(), "constantAttenuation");
 	GLint linearAttenuation_location = glGetUniformLocation(shader.ID(), "linearAttenuation");
 	// Pass the current values for our variables to the shader program
@@ -64,7 +53,7 @@ void display_handler(void) {
     glUniform3fv(lightDiffuse_location, 1, lightDiffuse);
     glUniform3fv(lightSpecular_location, 1, lightSpecular);
     glUniform3fv(lightGlobal_location, 1, lightGlobal);
-    glUniform1f(shininess_location, shininess);
+    glUniform1f(materialShininess_location, materialShininess);
     glUniform1f(constantAttenuation_location, constantAttenuation);
     glUniform1f(linearAttenuation_location, linearAttenuation);
 

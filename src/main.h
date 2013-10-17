@@ -8,9 +8,10 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "utils.h"
-#include "TriangleMesh.h"
-#include "Shader.h"
+#include "TriangleMesh.h"    // model loading
+#include "Shader.h"          // compiling shaders
+#include "utils.h"           // generic helper functions
+#include "scene_constants.h" // material and light properties
 
 
 ///////////////////////////////////////////////////////////////////////////////

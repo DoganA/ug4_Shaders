@@ -5,7 +5,7 @@ uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform mat3 normalMatrix;
 uniform vec3 materialAmbient, materialDiffuse, materialSpecular;
 uniform vec3 lightAmbient, lightDiffuse, lightSpecular, lightPosition, lightGlobal;
-uniform float shininess, constantAttenuation, linearAttenuation;
+uniform float materialShininess, constantAttenuation, linearAttenuation;
 
 attribute vec3 vertex_position, vertex_normal;
 attribute vec2 vertex_uv;
@@ -36,7 +36,7 @@ void main(void) {
         color +=  attenuation
                 * materialSpecular
                 * lightSpecular
-                * pow(cosAlpha, shininess);
+                * pow(cosAlpha, materialShininess);
     }
 
     uv = vertex_uv;

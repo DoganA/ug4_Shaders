@@ -4,7 +4,7 @@
 uniform mat4 projectionMatrix, viewMatrix, modelMatrix;
 uniform mat3 normalMatrix;
 uniform vec3 materialAmbient, materialDiffuse, materialSpecular;
-uniform float shininess, constantAttenuation, linearAttenuation;
+uniform float materialShininess, constantAttenuation, linearAttenuation;
 
 attribute vec3 vertex_position, vertex_normal;
 varying vec3 vertex_color, position, normal;

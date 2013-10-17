@@ -2,7 +2,7 @@
 #version 120
 
 uniform vec3 materialSpecular, lightSpecular, lightPosition;
-uniform float shininess, constantAttenuation, linearAttenuation;
+uniform float materialShininess, constantAttenuation, linearAttenuation;
 
 varying vec3 diffuse, ambientGlobal, ambient, position, normal;
 
@@ -22,7 +22,7 @@ void main(void) {
         color +=   attenuation
                  * materialSpecular
                  * lightSpecular
-                 * pow(cosAlpha, shininess);
+                 * pow(cosAlpha, materialShininess);
     }
 
     gl_FragColor = vec4(color, 1.0);

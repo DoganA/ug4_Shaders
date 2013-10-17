@@ -7,7 +7,8 @@ Compile the program with `make compile`.
 Run the program via
 `bin/main <model> <vertex-shader> <fragment-shader> <normal-mode> (texture)`
 - *model* is the path to the *obj* file to render
-- *vertex-shader* and *fragment-shader* specify the shaders to render with
+- *vertex-shader* and *fragment-shader* specify paths to the shaders to render
+  the scene with; a selection of shaders can be found in the *shaders* directory
 - set *normal-mode* to 1 in order to use vertex normals that are averaged over
   face normals or to 0 in order to skip the averaging step
 - provide the path to a *bmp* file in the optional *texture* argument in order

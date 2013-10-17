@@ -8,7 +8,10 @@ uniform vec3 lightAmbient, lightDiffuse, lightSpecular, lightPosition, lightGlob
 uniform float materialShininess, constantAttenuation, linearAttenuation;
 
 attribute vec3 vertex_position, vertex_normal;
+attribute vec2 vertex_uv;
+
 varying vec3 vertex_color;
+varying vec2 uv;
 
 void main(void) {
     vec4 vertex = vec4(vertex_position, 1.0);
@@ -36,6 +39,7 @@ void main(void) {
                 * pow(cosAlpha, materialShininess);
     }
 
+    uv = vertex_uv;
     vertex_color = color;
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertex;
 }

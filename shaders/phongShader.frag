@@ -3,8 +3,11 @@
 
 uniform vec3 materialSpecular, lightSpecular, lightPosition;
 uniform float materialShininess, constantAttenuation, linearAttenuation;
+uniform int useTexture;
+uniform sampler2D texture0;
 
 varying vec3 diffuse, ambientGlobal, ambient, position, normal;
+varying vec2 uv;
 
 void main(void) {
     vec3 N = normalize(normal);
@@ -25,5 +28,6 @@ void main(void) {
                  * pow(cosAlpha, materialShininess);
     }
 
+    if (useTexture != 0) color *= texture2D(texture0, uv.st).rgb;
     gl_FragColor = vec4(color, 1.0);
 }

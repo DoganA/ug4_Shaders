@@ -7,7 +7,9 @@ uniform vec3 materialAmbient, materialDiffuse;
 uniform vec3 lightAmbient, lightDiffuse, lightPosition, lightGlobal;
 
 attribute vec3 vertex_position, vertex_normal;
+attribute vec2 vertex_uv;
 varying vec3 ambientGlobal, ambient, diffuse, position, normal;
+varying vec2 uv;
 
 void main(void) {
     vec4 vertex = vec4(vertex_position, 1.0);
@@ -19,5 +21,6 @@ void main(void) {
     diffuse = materialDiffuse * lightDiffuse;
     ambientGlobal = materialAmbient * lightGlobal;
 
+    uv = vertex_uv;
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertex;
 }

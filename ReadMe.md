@@ -43,12 +43,12 @@ Compile and run with `make depth`
 ![depth shading screenshot](doc/depth.png)
 
 ###  Texturing
-Same as Gouraud shading only that the fragment shader interpolates pixel colors
-with colors from an image.
+Same as Flat/Gouraud/Phong shading only that the fragment shader interpolates
+pixel colors with colors from an image.
 
-Compile and run with `make texture`
+Compile and run with `make texture-{flat,gouraud,phong}`
 
-![texturing screenshot](doc/texture.png)
+![texturing screenshot](doc/texture-phong.png)
 
 ###  Camera movement
 

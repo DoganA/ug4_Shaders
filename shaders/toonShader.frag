@@ -1,9 +1,12 @@
 // Fragment Shader - acts at a per-pixel level
 #version 120
 
+uniform sampler2D texture0;
+uniform int useTexture;
 uniform vec3 lightPosition;
 
 varying vec3 position, vertex_color, normal;
+varying vec2 uv;
 
 void main(void) {
     vec3 N = normalize(normal);
@@ -24,5 +27,6 @@ void main(void) {
         discrete_color = vertex_color * 0.2;
     }
 
+    if (useTexture != 0) discrete_color *= texture2D(texture0, uv.st).rgb;
     gl_FragColor = vec4(discrete_color, 1.0);
 }

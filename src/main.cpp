@@ -8,6 +8,7 @@ glm::mat3 normalMatrix;
 
 GLuint vertex_position_buffer, vertex_normal_buffer, vertex_uv_buffer;
 GLuint textureID;
+int useTexture = 0;
 
 void cleanup(void) {
     // do nothing
@@ -35,6 +36,7 @@ void display_handler(void) {
 	GLint materialShininess_location   = glGetUniformLocation(shader.ID(), "materialShininess");
 	GLint constantAttenuation_location = glGetUniformLocation(shader.ID(), "constantAttenuation");
 	GLint linearAttenuation_location   = glGetUniformLocation(shader.ID(), "linearAttenuation");
+	GLint useTexture_location          = glGetUniformLocation(shader.ID(), "useTexture");
 	glUniformMatrix4fv( projectionMatrix_location, 1, GL_FALSE, &projectionMatrix[0][0]);
 	glUniformMatrix4fv( viewMatrix_location,       1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv( modelMatrix_location,      1, GL_FALSE, &modelMatrix[0][0]);
@@ -50,6 +52,7 @@ void display_handler(void) {
     glUniform1f(        materialShininess_location,   materialShininess);
     glUniform1f(        constantAttenuation_location, constantAttenuation);
     glUniform1f(        linearAttenuation_location,   linearAttenuation);
+    glUniform1i(        useTexture_location,          useTexture);
 
     // bind texture to shader
     GLint texture0_location = glGetAttribLocation(shader.ID(), "texture0");
@@ -259,6 +262,7 @@ int main(int argc, char **argv) {
     bool use_smoothed_normals;
     if (argc >= 6) {
         texture_path = argv[5];
+        useTexture = 1;
     }
 	if (argc >= 5) {
         model_path = argv[1];

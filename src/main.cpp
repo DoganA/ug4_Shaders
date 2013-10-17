@@ -21,15 +21,16 @@ GLfloat lightDiffuse[3]       = {0.33, 0.33, 0.33};
 GLfloat lightSpecular[3]      = {0.50, 0.50, 0.50};
 GLfloat lightGlobal[3]        = {0.33, 0.33, 0.33};
 
-GLuint vertex_position_buffer_object;
-GLuint vertex_normal_buffer_object;
-GLuint vertex_uv_buffer_object;
+GLuint vertex_position_buffer;
+GLuint vertex_normal_buffer;
+GLuint vertex_uv_buffer;
 GLuint textureID;
 
-void cleanup() {
+void cleanup(void) {
+    // do nothing
 }
 
-void display_handler() {
+void display_handler(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1,1,1);
 	shader.Bind();
@@ -79,7 +80,7 @@ void display_handler() {
 	GLint position_location = glGetAttribLocation(shader.ID(), "vertex_position");
 	if (position_location != -1) {
         glEnableVertexAttribArray(position_location);
-        glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
+        glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer);
         glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
@@ -87,7 +88,7 @@ void display_handler() {
 	GLint uv_location = glGetAttribLocation(shader.ID(), "vertex_uv");
 	if (uv_location != -1) {
         glEnableVertexAttribArray(uv_location);
-        glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer_object);
+        glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer);
         glVertexAttribPointer(uv_location, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
@@ -95,7 +96,7 @@ void display_handler() {
 	GLint normal_location = glGetAttribLocation(shader.ID(), "vertex_normal");
 	if (normal_location != -1) {
         glEnableVertexAttribArray(normal_location);
-        glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);
+        glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer);
         glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
@@ -107,20 +108,20 @@ void display_handler() {
 	glFlush();
 }
 
-glm::mat4 _get_projectionMatrix(void) {
+glm::mat4 get_default_projectionMatrix(void) {
     return glm::ortho(-windowX * 0.5f,
                        windowX * 0.5f,
                       -windowY * 0.5f,
                        windowY * 0.5f,
                       -1.0f, 400.0f);
 }
-glm::mat4 _get_viewMatrix(void) {
+glm::mat4 get_default_viewMatrix(void) {
     return glm::translate(glm::mat4(1.0f),glm::vec3(-50.0f,-50.0f,-300.0f));
 }
-glm::mat3 _get_normalMatrix(void) {
+glm::mat3 get_default_normalMatrix(void) {
     return glm::transpose(glm::inverse(glm::mat3(viewMatrix * modelMatrix)));
 }
-glm::mat4 _get_modelMatrix(void) {
+glm::mat4 get_default_modelMatrix(void) {
     return glm::translate(glm::mat4(1.0f),glm::vec3(0.0f));
 }
 
@@ -140,14 +141,14 @@ void keyboard_handler(unsigned char key, int x, int y) {
         case 'f': rotation = glm::vec3( 0,-1, 0); break;
         case 'g': rotation = glm::vec3( 0, 0, 1); break;
         case 'h': rotation = glm::vec3( 0, 0,-1); break;
-        case ' ': viewMatrix = _get_viewMatrix(); break;
+        case ' ': viewMatrix = get_default_viewMatrix(); break;
     }
     if (translation.x != 0 || translation.y != 0 || translation.z != 0) {
         viewMatrix = glm::translate(viewMatrix, translation);
     } else if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0) {
         viewMatrix = glm::rotate(viewMatrix, 1.0f, rotation);
     }
-    normalMatrix = _get_normalMatrix();
+    normalMatrix = get_default_normalMatrix();
     display_handler();
 }
 
@@ -190,16 +191,16 @@ void setup_texture(char *texture_path, GLuint *textureID) {
     glEnable(GL_TEXTURE_2D);
 }
 
-void setup_vertex_position_buffer_object() {
-	glGenBuffers(1, &vertex_position_buffer_object);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
+void setup_vertex_position_buffer_object(void) {
+	glGenBuffers(1, &vertex_position_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * trig.VertexCount(),
 		         &trig.Vertices()[0], GL_STATIC_DRAW);
 }
 
-void setup_vertex_uv_buffer_object() {
-	glGenBuffers(1, &vertex_uv_buffer_object);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer_object);
+void setup_vertex_uv_buffer_object(void) {
+	glGenBuffers(1, &vertex_uv_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_uv_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * trig.UVs().size(),
 		         &trig.UVs()[0], GL_STATIC_DRAW);
 }
@@ -256,8 +257,8 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
             normals.push_back(glm::normalize(face_normal));
         }
     }
-    glGenBuffers(1, &vertex_normal_buffer_object);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer_object);
+    glGenBuffers(1, &vertex_normal_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_normal_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * normals.size(),
                  &normals[0], GL_STATIC_DRAW);
 }
@@ -316,9 +317,9 @@ int main(int argc, char **argv) {
 	setup_vertex_uv_buffer_object();
     setup_vertex_normal_buffer_object(use_smoothed_normals);
 	// set up camera and object transformation matrices
-	projectionMatrix = _get_projectionMatrix();
-	viewMatrix = _get_viewMatrix();
-	modelMatrix = _get_modelMatrix();
-    normalMatrix = _get_normalMatrix();
+	projectionMatrix = get_default_projectionMatrix();
+	viewMatrix = get_default_viewMatrix();
+	modelMatrix = get_default_modelMatrix();
+    normalMatrix = get_default_normalMatrix();
 	glutMainLoop();
 }

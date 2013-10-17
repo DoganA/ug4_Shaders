@@ -50,21 +50,21 @@ texture-flat: compile
 		$(SHADERS)/simpleShader.vert \
 		$(SHADERS)/simpleShader.frag \
 		0 \
-		$(RES)/wood.bmp
+		$(RES)/texture_map.bmp
 
 texture-gouraud: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \
 		$(SHADERS)/simpleShader.vert \
 		$(SHADERS)/simpleShader.frag \
 		1 \
-		$(RES)/wood.bmp
+		$(RES)/texture_map.bmp
 
 texture-phong: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \
 		$(SHADERS)/phongShader.vert \
 		$(SHADERS)/phongShader.frag \
 		1 \
-		$(RES)/wood.bmp
+		$(RES)/texture_map.bmp
 
 bump: compile
 	$(BIN)/$(PROG) $(RES)/teapot.obj \

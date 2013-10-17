@@ -1,6 +1,6 @@
 # Computer Graphics Assignment 1
 
-### How to use
+## How to use
 
 Compile the program with `make compile`.
 
@@ -25,6 +25,8 @@ rendered object's color can be changed by modifying *src/scene_constants.h*.
 
 Note that only a single light-source is currently supported, however, supporting
 multiple lights is a trivial extension.
+
+## Implemented functionality
 
 ### Flat shading
 The vertex shader computes and interpolates all intensities: attenuation,

@@ -42,6 +42,14 @@ Compile and run with `make depth`
 
 ![depth shading screenshot](doc/depth.png)
 
+###  Texturing
+Same as Gouraud shading only that the fragment shader interpolates pixel colors
+with colors from an image.
+
+Compile and run with `make texture`
+
+![texturing screenshot](doc/texture.png)
+
 ###  Camera movement
 
 Use `q w e r t y` to translate in +/- direction around the three axes

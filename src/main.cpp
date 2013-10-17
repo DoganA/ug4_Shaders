@@ -24,6 +24,7 @@ float lightGlobal[3]        = {0.33, 0.33, 0.33};
 unsigned int vertex_position_buffer_object;
 unsigned int vertex_normal_buffer_object;
 unsigned int vertex_uv_buffer_object;
+unsigned int textureID;
 
 void cleanup() {
 }
@@ -65,6 +66,14 @@ void display_handler() {
     glUniform1f(shininess_location, shininess);
     glUniform1f(constantAttenuation_location, constantAttenuation);
     glUniform1f(linearAttenuation_location, linearAttenuation);
+
+    // Tell OpenGL we will be using texture variable in the shader
+    int texture0_location = glGetAttribLocation(shader.ID(), "texture0");
+    if (texture0_location != -1) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glUniform1i(texture0_location, 0);
+    }
 
     // Tell OpenGL we will be using vertex position variable in the shader
 	int position_location = glGetAttribLocation(shader.ID(), "vertex_position");
@@ -142,6 +151,45 @@ void keyboard_handler(unsigned char key, int x, int y) {
     display_handler();
 }
 
+void setup_texture(char *texture_path) {
+    if (texture_path == NULL) return;
+    unsigned char header[54];
+    unsigned int data_pos, width, height, texture_size;
+    unsigned char *data;
+    // open file
+    FILE *file = fopen(texture_path, "rb");
+    if (!file) {
+        cerr << "couldn't open image" << endl;
+        return;
+    }
+    // validate header
+    if ((fread(header, 1, 54, file) != 54) || (header[0] != 'B' || header[1] != 'M')) {
+        std::cerr << "not a valid bmp file" << std::endl;
+        return;
+    }
+    // read integers
+    data_pos     = *(int*)&(header[0x0A]);
+    texture_size = *(int*)&(header[0x22]);
+    width        = *(int*)&(header[0x12]);
+    height       = *(int*)&(header[0x16]);
+    // set defaults if bmp is misformatted
+    if (texture_size == 0) texture_size = width * height * 3;
+    if (data_pos == 0)     data_pos = 54;
+    // read image data
+    data = new unsigned char[texture_size];
+    fread(data, 1, texture_size, file);
+    fclose(file);
+    // convert to OpenGL texture
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+    glEnable(GL_TEXTURE_2D);
+}
+
 void setup_vertex_position_buffer_object() {
 	glGenBuffers(1, &vertex_position_buffer_object);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_position_buffer_object);
@@ -217,11 +265,15 @@ void setup_vertex_normal_buffer_object(bool smoothed) {
 int main(int argc, char **argv) {
 	atexit(cleanup);
     cout << "Computer Graphics Assignment 1" << endl;
-    char *model_path;
-    char *vertexshader_path;
-    char *fragmentshader_path;
+    char *model_path = NULL;
+    char *vertexshader_path = NULL;
+    char *fragmentshader_path = NULL;
+    char *texture_path = NULL;
     bool use_smoothed_normals;
-	if (argc == 5) {
+    if (argc >= 6) {
+        texture_path = argv[5];
+    }
+	if (argc >= 5) {
         model_path = argv[1];
         vertexshader_path = argv[2];
         fragmentshader_path = argv[3];
@@ -233,6 +285,7 @@ int main(int argc, char **argv) {
              << " <vertex-shader::path> "
              << " <fragment-shader::path> "
              << " <smooth-normals::{0,1}>"
+             << " (<texture::path>)"
              << endl;
 		exit(1);
 	}
@@ -258,6 +311,7 @@ int main(int argc, char **argv) {
 	// create shader, prepare data for OpenGL
     trig.LoadFile(model_path);
 	shader.Init(vertexshader_path, fragmentshader_path);
+    setup_texture(texture_path);
 	setup_vertex_position_buffer_object();
 	setup_vertex_uv_buffer_object();
     setup_vertex_normal_buffer_object(use_smoothed_normals);

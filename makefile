@@ -45,5 +45,12 @@ depth: compile
 		$(SHADERS)/depthShader.frag \
 		1
 
+texture: compile
+	$(BIN)/$(PROG) $(RES)/teapot.obj \
+		$(SHADERS)/textureShader.vert \
+		$(SHADERS)/textureShader.frag \
+		1 \
+		$(RES)/wood.bmp
+
 clean:
 	rm -f $(BIN)/*

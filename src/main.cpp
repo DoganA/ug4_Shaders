@@ -16,10 +16,10 @@ float shininess             = 10;
 float constantAttenuation   = 0.1;
 float linearAttenuation     = 0.9;
 float lightPosition[3]      = {0.0, 0.0, 2.0};
-float lightAmbient[3]       = {0.99, 0.99, 0.99};
-float lightDiffuse[3]       = {0.99, 0.99, 0.99};
-float lightSpecular[3]      = {0.99, 0.99, 0.99};
-float lightGlobal[3]        = {0.99, 0.99, 0.99};
+float lightAmbient[3]       = {0.33, 0.33, 0.33};
+float lightDiffuse[3]       = {0.33, 0.33, 0.33};
+float lightSpecular[3]      = {0.50, 0.50, 0.50};
+float lightGlobal[3]        = {0.33, 0.33, 0.33};
 
 unsigned int vertex_position_buffer_object;
 unsigned int vertex_normal_buffer_object;

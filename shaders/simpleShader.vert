@@ -11,12 +11,15 @@ attribute vec3 vertex_position, vertex_normal;
 varying vec3 vertex_color;
 
 void main(void) {
+    vec4 vertex = vec4(vertex_position, 1.0);
+    vec3 position = vec3(viewMatrix * modelMatrix * vertex);
+
     vec3 ambientGlobal = materialAmbient * lightGlobal;
     vec3 ambient = materialAmbient * lightAmbient;
     vec3 diffuse = materialDiffuse * lightDiffuse;
 
     vec3 N = normalize(normalMatrix * vertex_normal); // normal
-    vec3 L = normalize(lightPosition); // light
+    vec3 L = normalize(lightPosition - position); // light
     vec3 R = 2 * dot(L, N) * N - L; // reflection
 
     float cosTheta = max(dot(L, N), 0.0);
@@ -34,5 +37,5 @@ void main(void) {
     }
 
     vertex_color = color;
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex_position, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertex;
 }

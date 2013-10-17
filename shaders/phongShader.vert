@@ -11,7 +11,6 @@ varying vec3 ambientGlobal, ambient, diffuse, position, normal;
 
 void main(void) {
     vec4 vertex = vec4(vertex_position, 1.0);
-    vec3 L = normalize(lightPosition);
 
     normal = normalize(normalMatrix * vertex_normal);
     position = vec3(viewMatrix * modelMatrix * vertex);

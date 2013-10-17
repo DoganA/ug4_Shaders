@@ -1,5 +1,20 @@
 # Compute Graphics Assignment 1
 
+### How to use
+
+Compile the program with `make compile`.
+Run the program via
+`bin/main <model> <vertex-shader> <fragment-shader> <normal-mode> (texture)`
+- *model* is the path to the *obj* file to render
+- *vertex-shader* and *fragment-shader* specify the shaders to render with
+- set *normal-mode* to 1 in order to use vertex normals that are averaged over
+  face normals or to 0 in order to skip the averaging step
+- provide the path to a *bmp* file in the optional *texture* argument in order
+  to render the scene with a texture mapped onto the object
+
+Alternatively, just run the program with the `make` commands described in the
+following sections. **This is the recommended way to run the program.**
+
 ### Flat shading
 The vertex shader computes and interpolates all intensities: attenuation,
 ambient, diffuse and specular. Vertex normals are not averaged over adjacent
@@ -7,7 +22,7 @@ faces.
 
 Compile and run with `make flat`
 
-![flat shading screenshot](doc/flat.png)
+![flat shading screen-shot](doc/flat.png)
 
 ###  Gouraud shading
 Same as Flat shading but the vertex normals are computed by averaging over the
@@ -15,7 +30,7 @@ normals of adjacent faces.
 
 Compile and run with `make gouraud`
 
-![gouraud shading screenshot](doc/gouraud.png)
+![gouraud shading screen-shot](doc/gouraud.png)
 
 ###  Phong shading
 The vertex shader computes ambient and diffuse intensities. The fragment shader
@@ -23,7 +38,7 @@ computes attenuation and specularities and interpolates everything.
 
 Compile and run with `make phong`
 
-![phong shading screenshot](doc/phong.png)
+![phong shading screen-shot](doc/phong.png)
 
 ###  Toon shading
 The vertex shader computes colors based on material properties. The fragment
@@ -32,15 +47,15 @@ color into bins accordingly.
 
 Compile and run with `make toon`
 
-![toon shading screenshot](doc/toon.png)
+![toon shading screen-shot](doc/toon.png)
 
 ###  Depth shading
 The vertex shader computes the z-position of each vertex in 3-d space. The
-fragment shader colors pixels relative to this depth.
+fragment shader Colo's pixels relative to this depth.
 
 Compile and run with `make depth`
 
-![depth shading screenshot](doc/depth.png)
+![depth shading screen-shot](doc/depth.png)
 
 ###  Texturing
 Same as Flat/Gouraud/Phong shading but the fragment shader interpolates pixel
@@ -48,7 +63,7 @@ colors with colors from an image.
 
 Compile and run with `make texture-{flat,gouraud,phong}`
 
-![texturing screenshot](doc/texture-phong.png)
+![texturing screen-shot](doc/texture-phong.png)
 
 ###  Camera movement
 

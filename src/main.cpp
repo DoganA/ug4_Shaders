@@ -127,6 +127,7 @@ void keyboard_handler(unsigned char key, int x, int y) {
         case 'g': rotation = glm::vec3( 0, 0, 1); break;
         case 'h': rotation = glm::vec3( 0, 0,-1); break;
         case ' ': viewMatrix = get_default_viewMatrix(); break;
+        case  27: exit(0);
     }
     // perform the translation or rotation
     if (translation.x != 0 || translation.y != 0 || translation.z != 0) {
